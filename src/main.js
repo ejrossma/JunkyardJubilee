@@ -7,8 +7,22 @@ let config = {
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false, // turn true to enable the collision borders/barriers
+            gravity: {
+                x: 0,
+                y: 0
+            }
+        }
+    },
 }
 
 let game = new Phaser.Game(config);
 
+// global variables
 let borderSize = game.config.height / 15;
+let cursors;
+const SCALE = 0.5;
+const tileSize = 16;

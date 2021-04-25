@@ -5,7 +5,7 @@ class Menu extends Phaser.Scene {
     
     preload(){
         // load sprites/images
-        this.load.image('ground', './assets/ground.png');
+        this.load.image('ground', './assets/dirtTile.png');
         this.load.image('player', './assets/player.png');
     }
     create() {

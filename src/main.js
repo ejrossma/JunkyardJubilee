@@ -24,5 +24,7 @@ let game = new Phaser.Game(config);
 // global variables
 let borderSize = game.config.height / 15;
 let cursors;
+//High score
+let topScore = 0;
 const SCALE = 0.5;
 const tileSize = 16;

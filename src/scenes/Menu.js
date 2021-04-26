@@ -11,6 +11,8 @@ class Menu extends Phaser.Scene {
         this.load.image('back3', './assets/pngs/background/tempBackground3.png');
         this.load.image('back4', './assets/pngs/background/tempBackground4.png');
         this.load.image('back5', './assets/pngs/background/tempBackground5.png');
+        this.load.image('testCar', './assets/testCar.png');     // 128x64 image for testing purposes
+        this.load.image('testBox', './assets/boxProto.png');    // 64x64 image for testing purposes
 
         this.load.atlas('junkyardAtlas', 'assets/textureAtlas.png', 'assets/textureAtlas.json');
     }

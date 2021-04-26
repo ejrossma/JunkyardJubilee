@@ -5,13 +5,13 @@ class Menu extends Phaser.Scene {
     
     preload(){
         // load sprites/images
-        this.load.image('ground', './assets/dirtTile.png');
-        this.load.image('player', './assets/player.png');
-        this.load.image('back1', './assets/tempBackground1.png');
-        this.load.image('back2', './assets/tempBackground2.png');
-        this.load.image('back3', './assets/tempBackground3.png');
-        this.load.image('back4', './assets/tempBackground4.png');
-        this.load.image('back5', './assets/tempBackground5.png');
+        this.load.image('ground', './assets/pngs/64DirtFlipped.png');
+        this.load.image('player', './assets/pngs/60x78Player.png');
+        this.load.image('back1', './assets/pngs/tempBackground1.png');
+        this.load.image('back2', './assets/pngs/tempBackground2.png');
+        this.load.image('back3', './assets/pngs/tempBackground3.png');
+        this.load.image('back4', './assets/pngs/tempBackground4.png');
+        this.load.image('back5', './assets/pngs/tempBackground5.png');
     }
     create() {
         //Set background color

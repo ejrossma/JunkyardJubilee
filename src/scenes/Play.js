@@ -28,7 +28,6 @@ class Play extends Phaser.Scene {
         this.meteorGroup = this.add.group({
             runChildUpdate: true                // update runs on meteors
         });
-
         // create the ground tiles using the ground.png that covers the bottom of game screen (default tileSize = 16 which can be changed later)
         this.ground = this.add.group();
         for (let i = 0; i < game.config.width; i+= tileSize) 
@@ -54,6 +53,9 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+        // Check if collides
+        this.physics.world.collide(this.player, this.meteorGroup, this.loseScreen, null, this);
+        
         // update tiles (aka the ground scrolls)
         this.groundScroll.tilePositionX += this.SCROLL_SPEED;
 
@@ -89,11 +91,7 @@ class Play extends Phaser.Scene {
         if (!this.gameOver && this.obstacleDeployed == false)
         {
             this.obstacleDeployed = true;                           // set to true to prevent more than one spawning at a time
-<<<<<<< HEAD
             this.whichObstacle = Phaser.Math.Between(1,2);          // randomly select obstacle (1 at the moment)
-=======
-            this.whichObstacle = Phaser.Math.Between(1,1);          // randomly select obstacle (1 at the moment)
->>>>>>> 96e81f3011d728b4f1f4f98fd608a5df480dc7a6
             console.log("Obstacle Deployed");
             // check which obstacle is being spawned
             if (this.whichObstacle == 1)
@@ -115,12 +113,9 @@ class Play extends Phaser.Scene {
                     this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
                 }
             }
-<<<<<<< HEAD
             if(this.whichObstacle == 2){
                 this.addMeteor();
             }
-=======
->>>>>>> 96e81f3011d728b4f1f4f98fd608a5df480dc7a6
         }
  
         // jump obstacle checking

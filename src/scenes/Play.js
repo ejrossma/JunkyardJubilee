@@ -24,7 +24,7 @@ class Play extends Phaser.Scene {
         this.groundScroll = this.add.tileSprite(0,game.config.height-tileSize, game.config.width, tileSize, 'ground').setOrigin(0);
 
         // create the player (x, y, image)
-        this.player = this.physics.add.sprite(100, game.config.height - tileSize*2, 'player').setScale(SCALE);
+        this.player = this.physics.add.sprite(100, game.config.height - tileSize*2 - playerPadding, 'player').setScale(SCALE);
 
         // cursor key input (aka keyboard keys which are written in lowercase)
         cursors = this.input.keyboard.createCursorKeys();

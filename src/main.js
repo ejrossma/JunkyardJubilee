@@ -23,6 +23,7 @@ let game = new Phaser.Game(config);
 
 // global variables
 let borderSize = game.config.height / 15;
+let playerPadding = borderSize / 3;
 let cursors;
 const SCALE = 0.5;
-const tileSize = 16;
+const tileSize = 64;

@@ -5,12 +5,12 @@ class Menu extends Phaser.Scene {
     
     preload(){
         // load sprites/images
-        this.load.image('ground', './assets/dirtTile.png');
-        this.load.image('player', './assets/player.png');
+        this.load.image('ground', './assets/64DirtFlipped.png');
+        this.load.image('player', './assets/60x78Player.png');
     }
     create() {
         //Set background color
-        this.cameras.main.setBackgroundColor('#d6b894'); 
+        this.cameras.main.setBackgroundColor('#d6b894');
         //Set Temporary text boxes until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',
@@ -35,7 +35,7 @@ class Menu extends Phaser.Scene {
             this.scene.start('playScene');
         });
     }
-    update(){
+    update() {
         //temporary start
         //this.scene.start('playScene');
     }

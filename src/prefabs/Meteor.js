@@ -13,7 +13,7 @@ class Meteor extends Phaser.Physics.Arcade.Sprite {
         this.body.velocity.x = -this.speed / 1.5;
         this.body.velocity.y = this.speed;
         this.body.angularVelocity = 200;
-        if(!this.reachedBottom && this.y > 480){
+        if(!this.reachedBottom && this.y > 400){
             this.reachedBottom = true;
             //this.scene.addMeteor(this.parent, this.x, this.velocity, this.texture);
             console.log('Object Destroyed');    // debugging

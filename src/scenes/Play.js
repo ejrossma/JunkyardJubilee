@@ -4,7 +4,6 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-
         //Set background color
         this.cameras.main.setBackgroundColor('#d6b894'); 
         //set background
@@ -23,6 +22,12 @@ class Play extends Phaser.Scene {
         this.obstacleDeployed = false;                      // bool that controls when obstacles spawn
         this.gameOver = false;                              // game over boolean
         this.OBSTACLE_SPEED = -280;                         // speed that the jumping obstacles move
+
+        
+        //temporary call for meteor
+        this.meteorGroup = this.add.group({
+            runChildUpdate: true                // update runs on meteors
+        });
 
         // create the ground tiles using the ground.png that covers the bottom of game screen (default tileSize = 16 which can be changed later)
         this.ground = this.add.group();
@@ -45,6 +50,7 @@ class Play extends Phaser.Scene {
 
         // physics collider (makes so the player can't pass through ground)
         this.physics.add.collider(this.player, this.ground);
+
     }
 
     update() {
@@ -83,31 +89,31 @@ class Play extends Phaser.Scene {
         if (!this.gameOver && this.obstacleDeployed == false)
         {
             this.obstacleDeployed = true;                           // set to true to prevent more than one spawning at a time
-            this.whichObstacle = Phaser.Math.Between(1,1);          // randomly select obstacle (1 at the moment)
-            this.clock = this.time.delayedCall(4000, () => {        // spawn an obstacle after a delayed call
-                console.log("Obstacle Deployed");
-                // check which obstacle is being spawned
-                if (this.whichObstacle == 1)
+            this.whichObstacle = Phaser.Math.Between(1,2);          // randomly select obstacle (1 at the moment)
+            console.log("Obstacle Deployed");
+            // check which obstacle is being spawned
+            if (this.whichObstacle == 1)
+            {
+                // for this particular obstacle there is 2 variations so spawn whichever is randomly generated
+                this.whichJumpObstacle = Phaser.Math.Between(1, 2);
+                if (this.whichJumpObstacle == 1)
                 {
-                    // for this particular obstacle there is 2 variations so spawn whichever is randomly generated
-                    this.whichJumpObstacle = Phaser.Math.Between(1, 2);
-                    if (this.whichJumpObstacle == 1)
-                    {
-                        // obstacle that is 128 x 64
-                        this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.5, 'testCar').setScale(1);    // spawn sprite
-                        this.jumpObstacle.body.allowGravity = false;            // disable gravity
-                        this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
-                    }
-                    else if (this.whichJumpObstacle == 2)
-                    {
-                        // obstacle that is 64 x 64
-                        this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.5, 'testBox').setScale(1);    // spawn sprite
-                        this.jumpObstacle.body.allowGravity = false;            // disable gravity
-                        this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
-                    }
-                    this.obstacleDeployed = false;       // allow for new obstacle to be deployed
+                    // obstacle that is 128 x 64
+                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.5, 'testCar').setScale(1);    // spawn sprite
+                    this.jumpObstacle.body.allowGravity = false;            // disable gravity
+                    this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
                 }
-            }, null, this);
+                else if (this.whichJumpObstacle == 2)
+                {
+                    // obstacle that is 64 x 64
+                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.5, 'testBox').setScale(1);    // spawn sprite
+                    this.jumpObstacle.body.allowGravity = false;            // disable gravity
+                    this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
+                }
+            }
+            if(this.whichObstacle == 2){
+                this.addMeteor();
+            }
         }
  
         // jump obstacle checking
@@ -120,6 +126,7 @@ class Play extends Phaser.Scene {
                 this.jumpObstacle.destroy();        // destroy object
                 console.log('Object Destroyed');    // debugging
                 this.jumpObstacleDeployed = false;  // reset boolean
+                this.obstacleDeployed = false;       // allow for new obstacle to be deployed
             }
  
             // check for collision with player
@@ -142,5 +149,16 @@ class Play extends Phaser.Scene {
         {
             return false;
         }
+    }
+    //adds a meteor
+    addMeteor(){
+        this.spawn = Phaser.Math.Between(2, 7) * 100;
+        let fallingObs = new Meteor(this, this.spawn, 50, 'player').setOrigin(0.5, 0.5);
+        this.meteorGroup.add(fallingObs);
+    }
+    //currently sets back to menu
+    loseScreen(){
+        console.log('lose');
+        this.scene.start('menuScene');
     }
 }

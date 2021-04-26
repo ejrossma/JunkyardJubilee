@@ -4,6 +4,16 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+
+        //Set background color
+        this.cameras.main.setBackgroundColor('#d6b894'); 
+        //set background
+        this.back1 = this.add.tileSprite(0, 0, 800, 480, 'back1').setOrigin(0, 0);
+        this.back2 = this.add.tileSprite(0, 0, 800, 480, 'back2').setOrigin(0, 0);
+        this.back3 = this.add.tileSprite(0, 0, 800, 480, 'back3').setOrigin(0, 0);
+        this.back4 = this.add.tileSprite(0, 0, 800, 480, 'back4').setOrigin(0, 0);
+        this.back5 = this.add.tileSprite(0, 0, 800, 480, 'back5').setOrigin(0, 0);
+
         // variables and settings
         this.JUMP_VELOCITY = -500;              // lower -> cant jump as high, higher -> can jump higher
         this.MAX_JUMPS = 1;                     // amount of jumps the player can do (default to 1)

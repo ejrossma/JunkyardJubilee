@@ -5,13 +5,14 @@ class Menu extends Phaser.Scene {
     
     preload(){
         // load sprites/images
-        this.load.image('ground', './assets/pngs/64DirtFlipped.png');
-        this.load.image('player', './assets/pngs/60x78Player.png');
-        this.load.image('back1', './assets/pngs/tempBackground1.png');
-        this.load.image('back2', './assets/pngs/tempBackground2.png');
-        this.load.image('back3', './assets/pngs/tempBackground3.png');
-        this.load.image('back4', './assets/pngs/tempBackground4.png');
-        this.load.image('back5', './assets/pngs/tempBackground5.png');
+        this.load.image('ground', './assets/pngs/junkyardGround.png');
+        this.load.image('back1', './assets/pngs/background/tempBackground1.png');
+        this.load.image('back2', './assets/pngs/background/tempBackground2.png');
+        this.load.image('back3', './assets/pngs/background/tempBackground3.png');
+        this.load.image('back4', './assets/pngs/background/tempBackground4.png');
+        this.load.image('back5', './assets/pngs/background/tempBackground5.png');
+
+        this.load.atlas('junkyardAtlas', 'assets/textureAtlas.png', 'assets/textureAtlas.json');
     }
     create() {
         //Set background color

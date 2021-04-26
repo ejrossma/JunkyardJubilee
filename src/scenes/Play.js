@@ -24,7 +24,7 @@ class Play extends Phaser.Scene {
         this.ground = this.add.group();
         for (let i = 0; i < game.config.width; i+= tileSize) 
         {
-            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'ground').setScale(SCALE).setOrigin(0);
+            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'junkyardAtlas', 'ground').setScale(SCALE).setOrigin(0);
             groundTile.body.immovable = true;
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
@@ -34,7 +34,22 @@ class Play extends Phaser.Scene {
         this.groundScroll = this.add.tileSprite(0,game.config.height-tileSize, game.config.width, tileSize, 'ground').setOrigin(0);
 
         // create the player (x, y, image)
-        this.player = this.physics.add.sprite(100, game.config.height - tileSize*2, 'player').setScale(SCALE);
+        this.player = this.physics.add.sprite(100, game.config.height - tileSize*2, 'junkyardAtlas', 'robotRun0001').setScale(SCALE);
+        //setup player animation from texture atlas
+        this.anims.create({
+            key: 'robotRun',
+            frames: this.anims.generateFrameNames('junkyardAtlas', {
+                prefix: 'robotRun',
+                start: 1,
+                end: 7,
+                suffix: '',
+                zeroPad: 4
+                }),
+            frameRate:30,
+            repeat: -1
+        });
+        this.player.anims.play('robotRun');
+        
 
         // cursor key input (aka keyboard keys which are written in lowercase)
         cursors = this.input.keyboard.createCursorKeys();

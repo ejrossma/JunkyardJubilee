@@ -89,7 +89,11 @@ class Play extends Phaser.Scene {
         if (!this.gameOver && this.obstacleDeployed == false)
         {
             this.obstacleDeployed = true;                           // set to true to prevent more than one spawning at a time
+<<<<<<< HEAD
             this.whichObstacle = Phaser.Math.Between(1,2);          // randomly select obstacle (1 at the moment)
+=======
+            this.whichObstacle = Phaser.Math.Between(1,1);          // randomly select obstacle (1 at the moment)
+>>>>>>> 96e81f3011d728b4f1f4f98fd608a5df480dc7a6
             console.log("Obstacle Deployed");
             // check which obstacle is being spawned
             if (this.whichObstacle == 1)
@@ -111,9 +115,12 @@ class Play extends Phaser.Scene {
                     this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
                 }
             }
+<<<<<<< HEAD
             if(this.whichObstacle == 2){
                 this.addMeteor();
             }
+=======
+>>>>>>> 96e81f3011d728b4f1f4f98fd608a5df480dc7a6
         }
  
         // jump obstacle checking

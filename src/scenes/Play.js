@@ -19,7 +19,7 @@ class Play extends Phaser.Scene {
         this.SCROLL_SPEED = 2;                  // how fast the tiles are moving below
         this.physics.world.gravity.y = 2600;    // this was default physics, I changed it to higher and it didnt work, so idk if we can change
         this.whichObstacle = Phaser.Math.Between(1, 1);     // choose obstacle
-        this.obstacleDeployed = false;                      // bool that controls when obstacles spawn
+        this.obstacleDeployed = true;                      // bool that controls when obstacles spawn
         this.gameOver = false;                              // game over boolean
         this.OBSTACLE_SPEED = -280;                         // speed that the jumping obstacles move
 

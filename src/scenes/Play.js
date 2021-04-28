@@ -107,7 +107,6 @@ class Play extends Phaser.Scene {
             this.jumps--;
             this.jumping = false;
         }
-
         // deploy the obstacles in the game **conditions: game is not over && an object is not deployed (a buffer boolean)**
         if (!this.gameOver && this.obstacleDeployed == false)
         {
@@ -189,9 +188,31 @@ class Play extends Phaser.Scene {
     }
     //currently sets back to menu
     loseScreen(){
-        this.lose = this.add.tileSprite(400, 200, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
+        this.lose = this.add.tileSprite(400, 150, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameover = true;
         console.log('lose');
+        // When player loses, make it so they can return to to the menu by pressing the button.
+        //temp until buttons are made
+        let menuConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#ffffff',
+            color: '#000000',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
+        }
+        this.return = this.add.text(game.config.width/2, 350, 'MENU',
+        menuConfig).setOrigin(0.5, 0.5);
+        //set interactive
+        this.return.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.return.width,
+             this.return.height), Phaser.Geom.Rectangle.Contains);
+        this.return.on('pointerdown', () => {
+            this.scene.start('menuScene');
+        });
         //this.scene.start('menuScene');
     }
 }

@@ -64,10 +64,16 @@ class Play extends Phaser.Scene {
 
         // physics collider (makes so the player can't pass through ground)
         this.physics.add.collider(this.player, this.ground);
-
+        //adds collider with player and meteors
+        this.physics.add.collider(this.ground, this.meteorGroup);
     }
 
-    update() {
+    update(time, delta) {
+        let deltaMultiplier = (delta/16.66667);
+        this.back1.tilePositionX -= 0.05*deltaMultiplier;
+        this.back2.tilePositionX -= 0.07*deltaMultiplier;
+        this.back3.tilePositionX -= 0.1*deltaMultiplier;
+        this.back4.tilePositionX -= 0.15*deltaMultiplier;
         // Check if collides
         this.physics.world.collide(this.player, this.meteorGroup, this.loseScreen, null, this);
         
@@ -101,7 +107,6 @@ class Play extends Phaser.Scene {
             this.jumps--;
             this.jumping = false;
         }
-
         // deploy the obstacles in the game **conditions: game is not over && an object is not deployed (a buffer boolean)**
         if (!this.gameOver && this.obstacleDeployed == false)
         {
@@ -169,13 +174,45 @@ class Play extends Phaser.Scene {
     }
     //adds a meteor
     addMeteor(){
-        this.spawn = Phaser.Math.Between(2, 7) * 100;
-        let fallingObs = new Meteor(this, this.spawn, 50, 'player').setOrigin(0.5, 0.5);
-        this.meteorGroup.add(fallingObs);
+        //set to 7 for testing
+        this.spawn = Phaser.Math.Between(7, 7) * 100;
+        if(Phaser.Math.Between(1,2) == 1){
+            let fallingObs = new Meteor(this, this.spawn, 300, 'carDoor').setOrigin(0.5, 0.5);
+            this.meteorGroup.add(fallingObs);
+        }
+        else{
+            let fallingObs = new Meteor(this, this.spawn, 250, 'tire').setOrigin(0.5, 0.5);
+            this.meteorGroup.add(fallingObs);
+        }
+        
     }
     //currently sets back to menu
     loseScreen(){
+        this.lose = this.add.tileSprite(400, 150, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
+        this.gameover = true;
         console.log('lose');
-        this.scene.start('menuScene');
+        // When player loses, make it so they can return to to the menu by pressing the button.
+        //temp until buttons are made
+        let menuConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#ffffff',
+            color: '#000000',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
+        }
+        this.return = this.add.text(game.config.width/2, 350, 'MENU',
+        menuConfig).setOrigin(0.5, 0.5);
+        //set interactive
+        this.return.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.return.width,
+             this.return.height), Phaser.Geom.Rectangle.Contains);
+        this.return.on('pointerdown', () => {
+            this.scene.start('menuScene');
+        });
+        //this.scene.start('menuScene');
     }
 }

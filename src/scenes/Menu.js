@@ -6,11 +6,14 @@ class Menu extends Phaser.Scene {
     preload(){
         // load sprites/images
         this.load.image('ground', './assets/pngs/junkyardGround.png');
+        this.load.image('tire', './assets/pngs/tire.png');
+        this.load.image('carDoor', './assets/pngs/carDoor.png');
         this.load.image('back1', './assets/pngs/background/tempBackground1.png');
         this.load.image('back2', './assets/pngs/background/tempBackground2.png');
         this.load.image('back3', './assets/pngs/background/tempBackground3.png');
         this.load.image('back4', './assets/pngs/background/tempBackground4.png');
         this.load.image('back5', './assets/pngs/background/tempBackground5.png');
+        this.load.image('gameOverCard', './assets/pngs/background/gameOverCard.png');
         this.load.image('testCar', './assets/testCar.png');     // 128x64 image for testing purposes
         this.load.image('testBox', './assets/boxProto.png');    // 64x64 image for testing purposes
 

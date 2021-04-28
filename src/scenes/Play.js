@@ -121,7 +121,7 @@ class Play extends Phaser.Scene {
                 if (this.whichJumpObstacle == 1)
                 {
                     // obstacle that is 128 x 64
-                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.3, 'carObject').setScale(0.9);    // spawn sprite
+                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.32, 'carObject').setScale(0.9);    // spawn sprite
                     this.jumpObstacle.body.allowGravity = false;            // disable gravity
                     this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
                     this.jumpObstacle.immovable = true;
@@ -130,7 +130,7 @@ class Play extends Phaser.Scene {
                 else if (this.whichJumpObstacle == 2)
                 {
                     // obstacle that is 64 x 64
-                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.5, 'boxObject').setScale(1);    // spawn sprite
+                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.45, 'boxObject').setScale(0.9);    // spawn sprite
                     this.jumpObstacle.body.allowGravity = false;            // disable gravity
                     this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
                     this.jumpObstacle.immovable = true;

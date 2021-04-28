@@ -6,6 +6,8 @@ class Menu extends Phaser.Scene {
     preload(){
         // load sprites/images
         this.load.image('ground', './assets/pngs/junkyardGround.png');
+        this.load.image('tire', './assets/pngs/tire.png');
+        this.load.image('carDoor', './assets/pngs/carDoor.png');
         this.load.image('back1', './assets/pngs/background/tempBackground1.png');
         this.load.image('back2', './assets/pngs/background/tempBackground2.png');
         this.load.image('back3', './assets/pngs/background/tempBackground3.png');

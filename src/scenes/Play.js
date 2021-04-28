@@ -66,8 +66,6 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.player, this.ground);
         //adds collider with player and meteors
         this.physics.add.collider(this.ground, this.meteorGroup);
-
-        this.addMeteor;
     }
 
     update(time, delta) {
@@ -177,9 +175,17 @@ class Play extends Phaser.Scene {
     }
     //adds a meteor
     addMeteor(){
-        this.spawn = Phaser.Math.Between(6, 7) * 100;
-        let fallingObs = new Meteor(this, this.spawn, 50, 'player').setOrigin(0.5, 0.5);
-        this.meteorGroup.add(fallingObs);
+        //set to 7 for testing
+        this.spawn = Phaser.Math.Between(7, 7) * 100;
+        if(Phaser.Math.Between(1,2) == 1){
+            let fallingObs = new Meteor(this, this.spawn, 300, 'carDoor').setOrigin(0.5, 0.5);
+            this.meteorGroup.add(fallingObs);
+        }
+        else{
+            let fallingObs = new Meteor(this, this.spawn, 250, 'tire').setOrigin(0.5, 0.5);
+            this.meteorGroup.add(fallingObs);
+        }
+        
     }
     //currently sets back to menu
     loseScreen(){

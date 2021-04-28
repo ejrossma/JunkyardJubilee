@@ -189,7 +189,9 @@ class Play extends Phaser.Scene {
     }
     //currently sets back to menu
     loseScreen(){
+        this.lose = this.add.tileSprite(400, 200, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
+        this.gameover = true;
         console.log('lose');
-        this.scene.start('menuScene');
+        //this.scene.start('menuScene');
     }
 }

@@ -18,8 +18,8 @@ class Play extends Phaser.Scene {
         this.MAX_JUMPS = 1;                     // amount of jumps the player can do (default to 1)
         this.SCROLL_SPEED = 2;                  // how fast the tiles are moving below
         this.physics.world.gravity.y = 2600;    // this was default physics, I changed it to higher and it didnt work, so idk if we can change
-        this.whichObstacle = Phaser.Math.Between(1, 1);     // choose obstacle
-        this.obstacleDeployed = true;                      // bool that controls when obstacles spawn
+        this.whichObstacle = Phaser.Math.Between(1, 2);     // choose obstacle
+        this.obstacleDeployed = false;                      // bool that controls when obstacles spawn
         this.gameOver = false;                              // game over boolean
         this.OBSTACLE_SPEED = -280;                         // speed that the jumping obstacles move
 
@@ -81,28 +81,28 @@ class Play extends Phaser.Scene {
         this.groundScroll.tilePositionX += this.SCROLL_SPEED;
 
         // check if player is on the ground
-        this.player.isGrounded = this.player.body.touching.down;
+        if (!this.gameOver)
+        {
+            this.player.isGrounded = this.player.body.touching.down;
+        }
+        
         // if grounded, allow them to jump
-        if (this.player.isGrounded)
+        if (!this.gameOver && this.player.isGrounded)
         {
             //this.player.anims.play();  // placeholder walk animation spot
             this.jumps = this.MAX_JUMPS;
             this.jumping = false
         }
-        else
-        {
-            //this.player.anims.play();   // placeholder jump animation
-        }
 
         // detect how long the user presses the space(jump) key and jump accordingly
-        if (this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.space, 150)) 
+        if (!this.gameOver && this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.space, 150)) 
         {
             this.player.body.velocity.y = this.JUMP_VELOCITY;
             this.jumping = true;
         }
 
         // when key is let go of, allow for player to jump again
-        if (this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.space))
+        if (!this.gameOver && this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.space))
         {
             this.jumps--;
             this.jumping = false;
@@ -121,16 +121,20 @@ class Play extends Phaser.Scene {
                 if (this.whichJumpObstacle == 1)
                 {
                     // obstacle that is 128 x 64
-                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.5, 'testCar').setScale(1);    // spawn sprite
+                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.3, 'carObject').setScale(0.9);    // spawn sprite
                     this.jumpObstacle.body.allowGravity = false;            // disable gravity
                     this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
+                    this.jumpObstacle.immovable = true;
+                    this.physics.add.collider(this.jumpObstacle, this.ground);
                 }
                 else if (this.whichJumpObstacle == 2)
                 {
                     // obstacle that is 64 x 64
-                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.5, 'testBox').setScale(1);    // spawn sprite
+                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.5, 'boxObject').setScale(1);    // spawn sprite
                     this.jumpObstacle.body.allowGravity = false;            // disable gravity
                     this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
+                    this.jumpObstacle.immovable = true;
+                    this.physics.add.collider(this.jumpObstacle, this.ground);
                 }
             }
             if(this.whichObstacle == 2){
@@ -139,7 +143,7 @@ class Play extends Phaser.Scene {
         }
  
         // jump obstacle checking
-        if (!this.gameOver && this.jumpObstacleDeployed == true)
+        if (this.jumpObstacleDeployed == true)
         {
             this.jumpObstacle.x -= this.SCROLL_SPEED;   // move the jump obstacle towards player
  
@@ -152,26 +156,29 @@ class Play extends Phaser.Scene {
             }
  
             // check for collision with player
-            if (this.checkCollision(this.jumpObstacle, this.player))
+            this.physics.world.collide(this.player, this.jumpObstacle, this.playerHit, null, this);
+        }
+
+        if (this.gameOver == true)
+        {
+            this.player.x -= this.SCROLL_SPEED;
+
+            if (this.player.x <= 0)
             {
-                console.log('game over');           // would set game over boolean to true
+                this.player.destroy();
             }
         }
     }
 
-    // collison for obstacles and player
-    checkCollision(obstacle, player)
+    // when player is hit
+    playerHit()
     {
-        // AABB checking that works for jumping obstacles
-        if (player.x < obstacle.x + obstacle.width/2 && player.x + player.width/2 > obstacle.x && player.y < obstacle.y + obstacle.height && player.height + player.y > obstacle.y)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        this.player.body.velocity.y = this.JUMP_VELOCITY;
+        this.gameOver = true;
+        this.loseScreen();
+        console.log('game over');
     }
+
     //adds a meteor
     addMeteor(){
         //set to 7 for testing

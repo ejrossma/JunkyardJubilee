@@ -64,10 +64,18 @@ class Play extends Phaser.Scene {
 
         // physics collider (makes so the player can't pass through ground)
         this.physics.add.collider(this.player, this.ground);
+        //adds collider with player and meteors
+        this.physics.add.collider(this.ground, this.meteorGroup);
 
+        this.addMeteor;
     }
 
-    update() {
+    update(time, delta) {
+        let deltaMultiplier = (delta/16.66667);
+        this.back1.tilePositionX -= 0.05*deltaMultiplier;
+        this.back2.tilePositionX -= 0.07*deltaMultiplier;
+        this.back3.tilePositionX -= 0.1*deltaMultiplier;
+        this.back4.tilePositionX -= 0.15*deltaMultiplier;
         // Check if collides
         this.physics.world.collide(this.player, this.meteorGroup, this.loseScreen, null, this);
         
@@ -169,7 +177,7 @@ class Play extends Phaser.Scene {
     }
     //adds a meteor
     addMeteor(){
-        this.spawn = Phaser.Math.Between(2, 7) * 100;
+        this.spawn = Phaser.Math.Between(6, 7) * 100;
         let fallingObs = new Meteor(this, this.spawn, 50, 'player').setOrigin(0.5, 0.5);
         this.meteorGroup.add(fallingObs);
     }

@@ -197,7 +197,7 @@ class Play extends Phaser.Scene {
     //adds a meteor
     addMeteor(deltaMultiplier){
         //set to 7 for testing
-        this.spawn = Phaser.Math.Between(7, 7) * 100;
+        this.spawn = Phaser.Math.Between(7, 9) * 100;
         if(Phaser.Math.Between(1,2) == 1){
             let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'carDoor').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);

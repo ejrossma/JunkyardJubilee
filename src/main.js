@@ -10,7 +10,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true, // turn true to enable the collision borders/barriers
+            debug: false, // turn true to enable the collision borders/barriers
             gravity: {
                 x: 0,
                 y: 0

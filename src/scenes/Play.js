@@ -4,6 +4,9 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        //set cursor
+        this.input.setDefaultCursor('url(assets/crosshair.png), pointer');
+
         //Set background color
         this.cameras.main.setBackgroundColor('#d6b894'); 
         //set background
@@ -22,8 +25,19 @@ class Play extends Phaser.Scene {
         this.obstacleDeployed = false;                      // bool that controls when obstacles spawn
         this.gameOver = false;                              // game over boolean
         this.OBSTACLE_SPEED = -280;                         // speed that the jumping obstacles move
+        this.speedMultiplier = 1;
 
         
+        //delayed call for first obstacle
+        this.obstacleTimer = this.time.delayedCall (2000, () => { this.obstacleDeployed = false; });
+
+        this.speedTimer = this.time.addEvent({
+            delay: 5000,
+            callback: this.adjustSpeed,
+            callbackScope: this,
+            loop: true
+        });
+
         //temporary call for meteor
         this.meteorGroup = this.add.group({
             runChildUpdate: true                // update runs on meteors
@@ -193,8 +207,19 @@ class Play extends Phaser.Scene {
         }
         
     }
+    adjustSpeed() {
+        if (this.SCROLL_SPEED < 5) {
+            console.log("speed increased");
+            this.speedMultiplier += 1;
+            this.SCROLL_SPEED = this.SCROLL_SPEED + (0.2 * this.speedMultiplier);
+            //this.OBSTACLE_SPEED = this.OBSTACLE_SPEED - (100 * 0.25 * this.speedMultiplier);
+        }
+    }
+
     //currently sets back to menu
     loseScreen(){
+        //change crosshair back to cursor
+        this.input.setDefaultCursor('url(assets/crosshair.png), pointer');
         this.lose = this.add.tileSprite(400, 150, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameover = true;
         console.log('lose');

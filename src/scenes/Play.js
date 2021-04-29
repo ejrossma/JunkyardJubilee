@@ -81,6 +81,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.player, this.ground);
         //adds collider with player and meteors
         this.physics.add.collider(this.ground, this.meteorGroup);
+        this.addMeteor();
     }
 
     update(time, delta) {
@@ -202,13 +203,20 @@ class Play extends Phaser.Scene {
         if(Phaser.Math.Between(1,2) == 1){
             let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'carDoor').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
-            /*fallingObs.setInteractive({
-                useHandCursor: true
-            }).on('pointerdown', this.loseScreen());*/
+            fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
+                fallingObs.height), Phaser.Geom.Rectangle.Contains);
+            fallingObs.on('pointerdown', () => {
+                fallingObs.destroyObj();
+            });
         }
         else{
             let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'tire').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
+            fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
+                fallingObs.height), Phaser.Geom.Rectangle.Contains);
+            fallingObs.on('pointerdown', () => {
+                fallingObs.destroyObj();
+            });
             fallingObs.wheel = true;
         }
 

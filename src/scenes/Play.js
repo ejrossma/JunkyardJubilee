@@ -19,6 +19,7 @@ class Play extends Phaser.Scene {
         // variables and settings
         this.JUMP_VELOCITY = -800;              // lower -> cant jump as high, higher -> can jump higher
         this.MAX_JUMPS = 1;                     // amount of jumps the player can do (default to 1)
+        this.BASE_SPEED = 4;
         this.SCROLL_SPEED = 4;                  // how fast the tiles are moving below
         this.physics.world.gravity.y = 2600;    // this was default physics, I changed it to higher and it didnt work, so idk if we can change
         this.whichObstacle = 1;     // choose obstacle
@@ -217,7 +218,7 @@ class Play extends Phaser.Scene {
         if (this.SCROLL_SPEED < 12) {
             console.log("speed increased");
             this.speedMultiplier += 1;
-            this.SCROLL_SPEED = this.SCROLL_SPEED + (0.1 * this.speedMultiplier);
+            this.SCROLL_SPEED = this.BASE_SPEED + (0.2 * this.speedMultiplier);
             console.log(this.SCROLL_SPEED);
         }
     }

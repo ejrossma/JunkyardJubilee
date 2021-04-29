@@ -22,13 +22,15 @@ class Meteor extends Phaser.Physics.Arcade.Sprite {
             }
         }
         if(this.grounded == true){
-            this.x -= this.scene.SCROLL_SPEED*2;
+            this.x -= this.scene.SCROLL_SPEED;
         }
         if(this.x < -50){
-            this.scene.jumpObstacleDeployed = false;  // reset boolean
-            this.scene.obstacleDeployed = false;
-            this.destroy();
+            this.destroyObj();
         }
 
+    }
+    destroyObj(){
+        this.scene.obstacleDeployed = false;
+        this.destroy();
     }
 }

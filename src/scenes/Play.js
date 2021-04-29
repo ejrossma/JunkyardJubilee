@@ -16,7 +16,7 @@ class Play extends Phaser.Scene {
         // variables and settings
         this.JUMP_VELOCITY = -700;              // lower -> cant jump as high, higher -> can jump higher
         this.MAX_JUMPS = 1;                     // amount of jumps the player can do (default to 1)
-        this.SCROLL_SPEED = 2;                  // how fast the tiles are moving below
+        this.SCROLL_SPEED = 5;                  // how fast the tiles are moving below
         this.physics.world.gravity.y = 2600;    // this was default physics, I changed it to higher and it didnt work, so idk if we can change
         this.whichObstacle = Phaser.Math.Between(1, 2);     // choose obstacle
         this.obstacleDeployed = false;                      // bool that controls when obstacles spawn
@@ -97,7 +97,7 @@ class Play extends Phaser.Scene {
         // detect how long the user presses the space(jump) key and jump accordingly
         if (!this.gameOver && this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.space, 150)) 
         {
-            this.player.body.velocity.y = this.JUMP_VELOCITY*deltaMultiplier;
+            this.player.body.velocity.y = this.JUMP_VELOCITY;
             this.jumping = true;
         }
 
@@ -137,7 +137,8 @@ class Play extends Phaser.Scene {
                     this.physics.add.collider(this.jumpObstacle, this.ground);
                 }
             }
-            if(this.whichObstacle == 2){
+            else if(this.whichObstacle == 2){
+                this.obstacleDeployed = true;
                 this.addMeteor(deltaMultiplier);
             }
         }
@@ -186,11 +187,15 @@ class Play extends Phaser.Scene {
         if(Phaser.Math.Between(1,2) == 1){
             let fallingObs = new Meteor(this, this.spawn, 300*deltaMultiplier, 'carDoor').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
+            /*fallingObs.setInteractive({
+                useHandCursor: true
+            }).on('pointerdown', this.loseScreen());*/
         }
         else{
             let fallingObs = new Meteor(this, this.spawn, 250*deltaMultiplier, 'tire').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
         }
+
         
     }
     //currently sets back to menu

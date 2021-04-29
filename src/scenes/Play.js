@@ -72,7 +72,6 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
         this.player.anims.play('robotRun');
-        
 
         // cursor key input (aka keyboard keys which are written in lowercase)
         cursors = this.input.keyboard.createCursorKeys();
@@ -104,7 +103,6 @@ class Play extends Phaser.Scene {
         // if grounded, allow them to jump
         if (!this.gameOver && this.player.isGrounded)
         {
-            //this.player.anims.play();  // placeholder walk animation spot
             this.jumps = this.MAX_JUMPS;
             this.jumping = false
         }

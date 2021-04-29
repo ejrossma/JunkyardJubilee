@@ -21,7 +21,7 @@ class Menu extends Phaser.Scene {
     }
     create() {
         //Set background color
-        this.cameras.main.setBackgroundColor('#d6b894'); 
+        this.cameras.main.setBackgroundColor('#d6b894');
         //set background
         this.back1 = this.add.tileSprite(0, 0, 800, 480, 'back1').setOrigin(0, 0);
         this.back2 = this.add.tileSprite(0, 0, 800, 480, 'back2').setOrigin(0, 0);

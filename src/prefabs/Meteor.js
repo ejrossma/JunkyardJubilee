@@ -3,8 +3,8 @@ class Meteor extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, 0, texture);
         scene.add.existing(this);               //add to scene
         scene.physics.add.existing(this);       //add to physics
-        this.speed = velocity + 150;
-        this.fall = -velocity - 75;
+        this.speed = velocity + 350;
+        this.fall = -velocity - 150;
         this.grounded = false;
         this.randomSpin = Phaser.Math.Between(10, 25) * 10;
         this.wheel = false;

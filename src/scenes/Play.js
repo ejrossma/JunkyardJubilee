@@ -78,7 +78,7 @@ class Play extends Phaser.Scene {
         this.physics.world.collide(this.player, this.meteorGroup, this.loseScreen, null, this);
         
         // update tiles (aka the ground scrolls)
-        this.groundScroll.tilePositionX += this.SCROLL_SPEED;
+        this.groundScroll.tilePositionX += this.SCROLL_SPEED*deltaMultiplier;
 
         // check if player is on the ground
         if (!this.gameOver)
@@ -97,7 +97,7 @@ class Play extends Phaser.Scene {
         // detect how long the user presses the space(jump) key and jump accordingly
         if (!this.gameOver && this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.space, 150)) 
         {
-            this.player.body.velocity.y = this.JUMP_VELOCITY;
+            this.player.body.velocity.y = this.JUMP_VELOCITY*deltaMultiplier;
             this.jumping = true;
         }
 
@@ -138,14 +138,14 @@ class Play extends Phaser.Scene {
                 }
             }
             if(this.whichObstacle == 2){
-                this.addMeteor();
+                this.addMeteor(deltaMultiplier);
             }
         }
  
         // jump obstacle checking
         if (this.jumpObstacleDeployed == true)
         {
-            this.jumpObstacle.x -= this.SCROLL_SPEED;   // move the jump obstacle towards player
+            this.jumpObstacle.x -= this.SCROLL_SPEED*deltaMultiplier;   // move the jump obstacle towards player
  
             // if obstacle reaches the end of the screen, destroy it.
             if (this.jumpObstacle.x <= 0 - this.jumpObstacle.width) {
@@ -180,15 +180,15 @@ class Play extends Phaser.Scene {
     }
 
     //adds a meteor
-    addMeteor(){
+    addMeteor(deltaMultiplier){
         //set to 7 for testing
         this.spawn = Phaser.Math.Between(7, 7) * 100;
         if(Phaser.Math.Between(1,2) == 1){
-            let fallingObs = new Meteor(this, this.spawn, 300, 'carDoor').setOrigin(0.5, 0.5);
+            let fallingObs = new Meteor(this, this.spawn, 300*deltaMultiplier, 'carDoor').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
         }
         else{
-            let fallingObs = new Meteor(this, this.spawn, 250, 'tire').setOrigin(0.5, 0.5);
+            let fallingObs = new Meteor(this, this.spawn, 250*deltaMultiplier, 'tire').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
         }
         

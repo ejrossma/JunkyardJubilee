@@ -200,15 +200,16 @@ class Play extends Phaser.Scene {
         //set to 7 for testing
         this.spawn = Phaser.Math.Between(7, 7) * 100;
         if(Phaser.Math.Between(1,2) == 1){
-            let fallingObs = new Meteor(this, this.spawn, 300*deltaMultiplier, 'carDoor').setOrigin(0.5, 0.5);
+            let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'carDoor').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
             /*fallingObs.setInteractive({
                 useHandCursor: true
             }).on('pointerdown', this.loseScreen());*/
         }
         else{
-            let fallingObs = new Meteor(this, this.spawn, 250*deltaMultiplier, 'tire').setOrigin(0.5, 0.5);
+            let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'tire').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
+            fallingObs.wheel = true;
         }
 
         
@@ -222,7 +223,7 @@ class Play extends Phaser.Scene {
         }
     }
 
-    //currently sets back to menu
+    
     loseScreen(){
         //change crosshair back to cursor
         this.input.setDefaultCursor('url(assets/crosshair.png), pointer');

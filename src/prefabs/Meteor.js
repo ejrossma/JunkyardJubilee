@@ -28,6 +28,7 @@ class Meteor extends Phaser.Physics.Arcade.Sprite {
             this.x -= this.scene.SCROLL_SPEED*deltaMultiplier;
         }
         if(this.x < -50){
+            this.scene.obstaclesJumped += 1;
             this.destroyObj();
         }
 

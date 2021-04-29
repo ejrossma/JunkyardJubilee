@@ -79,9 +79,14 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.player, this.ground);
         //adds collider with player and meteors
         this.physics.add.collider(this.ground, this.meteorGroup);
+        this.obstaclesJumped = 0;
+        this.distanceTravelled = 0;
+        this.obstaclesDestroyed = 0;
+        this.timesJumped = 0;
     }
 
     update(time, delta) {
+        this.distanceTravelled += 0.1*this.speedMultiplier;
         let deltaMultiplier = (delta/16.66667);
         this.back1.tilePositionX -= 0.05*deltaMultiplier;
         this.back2.tilePositionX -= 0.07*deltaMultiplier;
@@ -118,6 +123,7 @@ class Play extends Phaser.Scene {
             this.player.body.velocity.y = this.JUMP_VELOCITY;
             this.jumping = true;
             this.player.isGrounded = false;
+            this.timesJumped += 1;
         }
 
         // when key is let go of, allow for player to jump again
@@ -170,6 +176,7 @@ class Play extends Phaser.Scene {
             // if obstacle reaches the end of the screen, destroy it.
             if (this.jumpObstacle.x <= 0 - this.jumpObstacle.width) {
                 this.jumpObstacle.destroy();        // destroy object
+                this.obstaclesJumped += 1;          //increment times jumped
                 console.log('Object Destroyed');    // debugging
                 this.jumpObstacleDeployed = false;  // reset boolean
                 this.obstacleDeployed = false;       // allow for new obstacle to be deployed
@@ -210,6 +217,7 @@ class Play extends Phaser.Scene {
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
             fallingObs.on('pointerdown', () => {
                 fallingObs.destroyObj();
+                this.obstaclesDestroyed += 1;
             });
         }
         else{
@@ -219,6 +227,7 @@ class Play extends Phaser.Scene {
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
             fallingObs.on('pointerdown', () => {
                 fallingObs.destroyObj();
+                this.obstaclesDestroyed += 1;
             });
             fallingObs.wheel = true;
         }
@@ -236,6 +245,10 @@ class Play extends Phaser.Scene {
 
     
     loseScreen(){
+        console.log("obstacles jumped: " + this.obstaclesJumped);
+        console.log("obstacles destroyed: " + this.obstaclesDestroyed);
+        console.log("distance travelled: " + Math.floor(this.distanceTravelled) + " ft");
+        console.log("total times jumped: " + this.timesJumped);
         //change crosshair back to cursor
         this.input.setDefaultCursor('url(assets/crosshair.png), pointer');
         this.lose = this.add.tileSprite(400, 150, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);

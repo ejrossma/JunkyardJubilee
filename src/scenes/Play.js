@@ -79,7 +79,6 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.player, this.ground);
         //adds collider with player and meteors
         this.physics.add.collider(this.ground, this.meteorGroup);
-        this.addMeteor();
     }
 
     update(time, delta) {

@@ -5,6 +5,7 @@ class jumpObstacle extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);       //add to physics
         this.body.allowGravity = false;            // disable gravity
         this.immovable = true;
+        this.locationChecked = false;
     }
 
     update(time, delta)
@@ -13,12 +14,16 @@ class jumpObstacle extends Phaser.Physics.Arcade.Sprite {
         this.x -= this.scene.SCROLL_SPEED*deltaMultiplier;
 
         // check whether anothe jump obstacle can be spawned
-        if (this.x <= game.config.width/1.5)
+        if (this.locationChecked == false)
         {
-            //console.log('jump obstacle allowed');
-            this.scene.JUMP_OBS_ALLOWED = true;
+            if (this.x <= game.config.width/1.25)
+            {
+                //console.log('jump obstacle allowed');
+                this.locationChecked = true;
+                this.scene.JUMP_OBS_ALLOWED = true;
+            }
         }
-
+        
         // destroy object when off screen
         if(this.x <= 0 - this.width) 
         {

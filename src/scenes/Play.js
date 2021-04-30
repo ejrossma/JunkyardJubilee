@@ -32,7 +32,7 @@ class Play extends Phaser.Scene {
         this.JUMP_OBS_ALLOWED = true;              // bool to see whether another jump obs can be spawned
 
         //delayed call for first obstacle
-        this.obstacleTimer = this.time.delayedCall (2000, () => { this.MAX_OBSTACLES = 1; });
+        this.obstacleTimer = this.time.delayedCall (2000, () => { this.obstacleDeployed = false; });
 
         this.speedTimer = this.time.addEvent({
             delay: 5000,
@@ -153,10 +153,11 @@ class Play extends Phaser.Scene {
             console.log(this.timesJumped);
         }
         // deploy the obstacles in the game
-        if (!this.gameOver && this.CURRENT_OBSTACLES_AMT < this.MAX_OBSTACLES)
+        if (!this.gameOver && this.CURRENT_OBSTACLES_AMT < this.MAX_OBSTACLES && this.obstacleDeployed == false)
         {
+            this.obstacleDeployed = true;
             this.CURRENT_OBSTACLES_AMT++;
-            this.time.delayedCall (500, () => { this.addObstacle(deltaMultiplier); });
+            this.addObstacle(deltaMultiplier);
         }
 
         // when game is over
@@ -237,11 +238,13 @@ class Play extends Phaser.Scene {
         {
             let jumpObs = new jumpObstacle(this, game.config.width + tileSize, game.config.height - tileSize*1.32, 'carObject').setScale(0.9).setOrigin(0.5, 0.5);
             this.jumpObsGroup.add(jumpObs);
+            this.obstacleDeployed = false;
         }
         else
         {
             let jumpObs= new jumpObstacle(this, game.config.width + tileSize, game.config.height - tileSize*1.45, 'boxObject').setScale(0.9).setOrigin(0.5, 0.5);
             this.jumpObsGroup.add(jumpObs);
+            this.obstacleDeployed = false;
         }
     }
 
@@ -252,6 +255,7 @@ class Play extends Phaser.Scene {
         if(Phaser.Math.Between(1,2) == 1){
             let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'carDoor').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
+            this.obstacleDeployed = false;
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
             fallingObs.on('pointerdown', () => {
@@ -263,6 +267,7 @@ class Play extends Phaser.Scene {
         else{
             let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'tire').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
+            this.obstacleDeployed = false;
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
             fallingObs.on('pointerdown', () => {

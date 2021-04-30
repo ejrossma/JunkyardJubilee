@@ -34,7 +34,7 @@ class Meteor extends Phaser.Physics.Arcade.Sprite {
 
     }
     destroyObj(){
-        this.scene.obstacleDeployed = false;
+        this.scene.CURRENT_OBSTACLES_AMT--;
         this.destroy();
     }
 }

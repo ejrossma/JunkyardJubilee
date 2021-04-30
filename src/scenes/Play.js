@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     create() {
         //set cursor
-        this.input.setDefaultCursor('url(assets/crosshair.png), pointer');
+        this.input.setDefaultCursor('url(assets/crosshair.png) 32.5 32.5, pointer');
 
         //Set background color
         this.cameras.main.setBackgroundColor('#d6b894'); 
@@ -27,10 +27,12 @@ class Play extends Phaser.Scene {
         this.gameOver = false;                              // game over boolean
         this.OBSTACLE_SPEED = -280;                         // speed that the jumping obstacles move
         this.speedMultiplier = 1;
+        this.MAX_OBSTACLES = 0;                  // maximum number of obstacles that can be spawned at a time
+        this.CURRENT_OBSTACLES_AMT = 0;          // how many obstacles are currently spawned
+        this.JUMP_OBS_ALLOWED = true;              // bool to see whether another jump obs can be spawned
 
-        
         //delayed call for first obstacle
-        this.obstacleTimer = this.time.delayedCall (2000, () => { this.obstacleDeployed = false; });
+        this.obstacleTimer = this.time.delayedCall (2000, () => { this.MAX_OBSTACLES = 1; });
 
         this.speedTimer = this.time.addEvent({
             delay: 5000,
@@ -43,6 +45,12 @@ class Play extends Phaser.Scene {
         this.meteorGroup = this.add.group({
             runChildUpdate: true                // update runs on meteors
         });
+
+        // temporary call for jump obstacle
+        this.jumpObsGroup = this.add.group({
+            runChildUpdate: true
+        });
+
         // create the ground tiles using the ground.png that covers the bottom of game screen (default tileSize = 16 which can be changed later)
         this.ground = this.add.group();
         for (let i = 0; i < game.config.width; i+= tileSize) 
@@ -79,6 +87,8 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.player, this.ground);
         //adds collider with player and meteors
         this.physics.add.collider(this.ground, this.meteorGroup);
+        // add collider with jump
+        this.physics.add.collider(this.ground, this.jumpObstacle);
         //score variables/misc
         this.obstaclesJumped = 0;
         this.distanceTravelled = 0;
@@ -96,6 +106,7 @@ class Play extends Phaser.Scene {
         this.back4.tilePositionX -= 0.15*deltaMultiplier;
         // Check if collides
         this.physics.world.collide(this.player, this.meteorGroup, this.loseScreen, null, this);
+        this.physics.world.collide(this.player, this.jumpObsGroup, this.playerHit, null, this);
         
         // update tiles (aka the ground scrolls)
         this.groundScroll.tilePositionX += this.SCROLL_SPEED*deltaMultiplier;
@@ -105,7 +116,7 @@ class Play extends Phaser.Scene {
         {
             if (this.player.y > 396) {
                 this.player.isGrounded = true;
-                console.log("grounded");
+                //console.log("grounded");
             }
         }
         
@@ -141,60 +152,14 @@ class Play extends Phaser.Scene {
             this.firstJump = true;
             console.log(this.timesJumped);
         }
-        // deploy the obstacles in the game **conditions: game is not over && an object is not deployed (a buffer boolean)**
-        if (!this.gameOver && this.obstacleDeployed == false)
+        // deploy the obstacles in the game
+        if (!this.gameOver && this.CURRENT_OBSTACLES_AMT < this.MAX_OBSTACLES)
         {
-            this.obstacleDeployed = true;                           // set to true to prevent more than one spawning at a time
-            this.whichObstacle = Phaser.Math.Between(1,2);          // randomly select obstacle (1 at the moment)
-            console.log("Obstacle Deployed");
-            // check which obstacle is being spawned
-            if (this.whichObstacle == 1)
-            {
-                // for this particular obstacle there is 2 variations so spawn whichever is randomly generated
-                this.whichJumpObstacle = Phaser.Math.Between(1, 2);
-                if (this.whichJumpObstacle == 1)
-                {
-                    // obstacle that is 128 x 64
-                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.32, 'carObject').setScale(0.9);    // spawn sprite
-                    this.jumpObstacle.body.allowGravity = false;            // disable gravity
-                    this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
-                    this.jumpObstacle.immovable = true;
-                    this.physics.add.collider(this.jumpObstacle, this.ground);
-                }
-                else if (this.whichJumpObstacle == 2)
-                {
-                    // obstacle that is 64 x 64
-                    this.jumpObstacle = this.physics.add.sprite(game.config.width + tileSize, game.config.height - tileSize*1.45, 'boxObject').setScale(0.9);    // spawn sprite
-                    this.jumpObstacle.body.allowGravity = false;            // disable gravity
-                    this.jumpObstacleDeployed = true;                       // tell which obstacle is deployed (for checking later)
-                    this.jumpObstacle.immovable = true;
-                    this.physics.add.collider(this.jumpObstacle, this.ground);
-                }
-            }
-            else if(this.whichObstacle == 2){
-                this.obstacleDeployed = true;
-                this.addMeteor(deltaMultiplier);
-            }
-        }
- 
-        // jump obstacle checking
-        if (this.jumpObstacleDeployed == true)
-        {
-            this.jumpObstacle.x -= this.SCROLL_SPEED*deltaMultiplier;   // move the jump obstacle towards player
- 
-            // if obstacle reaches the end of the screen, destroy it.
-            if (this.jumpObstacle.x <= 0 - this.jumpObstacle.width) {
-                this.jumpObstacle.destroy();        // destroy object
-                this.obstaclesJumped += 1;          //increment times jumped
-                console.log('Object Destroyed');    // debugging
-                this.jumpObstacleDeployed = false;  // reset boolean
-                this.obstacleDeployed = false;       // allow for new obstacle to be deployed
-            }
- 
-            // check for collision with player
-            this.physics.world.collide(this.player, this.jumpObstacle, this.playerHit, null, this);
+            this.CURRENT_OBSTACLES_AMT++;
+            this.time.delayedCall (500, () => { this.addObstacle(deltaMultiplier); });
         }
 
+        // when game is over
         if (this.gameOver == true)
         {
             this.player.x -= this.SCROLL_SPEED;
@@ -203,6 +168,28 @@ class Play extends Phaser.Scene {
             {
                 this.player.destroy();
             }
+        }
+
+        // update amount of objects spawned
+        if (!this.gameOver && this.SCROLL_SPEED < 5)
+        {
+            this.MAX_OBSTACLES = 1;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=5 && this.SCROLL_SPEED < 7)
+        {
+            this.MAX_OBSTACLES = 2;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=7 && this.SCROLL_SPEED < 9)
+        {
+            this.MAX_OBSTACLES = 3;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=9 && this.SCROLL_SPEED < 11)
+        {
+            this.MAX_OBSTACLES = 4;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=13)
+        {
+            this.MAX_OBSTACLES = 5;
         }
     }
 
@@ -213,6 +200,49 @@ class Play extends Phaser.Scene {
         this.gameOver = true;
         this.loseScreen();
         console.log('game over');
+    }
+
+    // add an obstacle
+    addObstacle(deltaMultiplier)
+    {
+        // check if a jumpObs can be spawned without overlap
+        if (this.JUMP_OBS_ALLOWED == true)
+        {
+            this.whichObstacle = Phaser.Math.Between(1,2);
+        }
+        else
+        {
+            this.whichObstacle = Phaser.Math.Between(2,2);
+        }
+        console.log("Obstacle Deployed");
+        // check which obstacle is being spawned
+        if (this.whichObstacle == 1)
+        {
+            // set bool
+            this.JUMP_OBS_ALLOWED = false;
+            this.addJumpObstacle();
+        }
+        else if(this.whichObstacle == 2)
+        {
+            this.addMeteor(deltaMultiplier);
+        }
+        
+    }
+
+    //adds a jump obstacle
+    addJumpObstacle()
+    {
+        this.whichJumpObstacle = Phaser.Math.Between(1, 2);
+        if (this.whichJumpObstacle == 1)
+        {
+            let jumpObs = new jumpObstacle(this, game.config.width + tileSize, game.config.height - tileSize*1.32, 'carObject').setScale(0.9).setOrigin(0.5, 0.5);
+            this.jumpObsGroup.add(jumpObs);
+        }
+        else
+        {
+            let jumpObs= new jumpObstacle(this, game.config.width + tileSize, game.config.height - tileSize*1.45, 'boxObject').setScale(0.9).setOrigin(0.5, 0.5);
+            this.jumpObsGroup.add(jumpObs);
+        }
     }
 
     //adds a meteor
@@ -246,7 +276,7 @@ class Play extends Phaser.Scene {
         
     }
     adjustSpeed() {
-        if (this.SCROLL_SPEED < 12) {
+        if (this.SCROLL_SPEED < 13) {
             console.log("speed increased");
             this.speedMultiplier += 1;
             this.SCROLL_SPEED = this.BASE_SPEED + (0.2 * this.speedMultiplier);
@@ -261,7 +291,7 @@ class Play extends Phaser.Scene {
         console.log("distance travelled: " + Math.floor(this.distanceTravelled) + " ft");
         console.log("total times jumped: " + this.timesJumped);
         //change crosshair back to cursor
-        this.input.setDefaultCursor('url(assets/crosshair.png), pointer');
+        this.input.setDefaultCursor('url(assets/crosshair.png) 32.5 32.5, pointer');
         this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameOver = true;
         console.log('lose');

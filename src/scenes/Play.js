@@ -116,7 +116,6 @@ class Play extends Phaser.Scene {
         {
             if (this.player.y > 396) {
                 this.player.isGrounded = true;
-                //console.log("grounded");
             }
         }
         
@@ -136,8 +135,8 @@ class Play extends Phaser.Scene {
             this.player.body.velocity.y = this.JUMP_VELOCITY;
             if(this.firstJump){
                 this.sound.play('jumpSound');           //play the jump sound
-                console.log("welp");        
                 this.firstJump = false;
+                this.timesJumped += 1;
                 this.stopSound = this.time.delayedCall (200, () => { this.firstJump = true; });
             }
             this.jumping = true;
@@ -149,9 +148,7 @@ class Play extends Phaser.Scene {
         {
             this.jumps--;
             this.jumping = false;
-            this.timesJumped += 1;
             this.firstJump = true;
-            console.log(this.timesJumped);
         }
         // deploy the obstacles in the game
         if (!this.gameOver && this.CURRENT_OBSTACLES_AMT < this.MAX_OBSTACLES && this.obstacleDeployed == false)
@@ -252,7 +249,7 @@ class Play extends Phaser.Scene {
     //adds a meteor
     addMeteor(deltaMultiplier){
         //set to 7 for testing
-        this.spawn = Phaser.Math.Between(7, 9) * 100;
+        this.spawn = Phaser.Math.Between(45, 90) * 10;
         if(Phaser.Math.Between(1,2) == 1){
             let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'carDoor').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
@@ -292,15 +289,10 @@ class Play extends Phaser.Scene {
 
     
     loseScreen(){
-        console.log("obstacles jumped: " + this.obstaclesJumped);
-        console.log("obstacles destroyed: " + this.obstaclesDestroyed);
-        console.log("distance travelled: " + Math.floor(this.distanceTravelled) + " ft");
-        console.log("total times jumped: " + this.timesJumped);
         //change crosshair back to cursor
         this.input.setDefaultCursor('url(assets/crosshair.png) 32.5 32.5, pointer');
         this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameOver = true;
-        console.log('lose');
         // When player loses, make it so they can return to to the menu by pressing the button.
         //temp until buttons are made
         let menuConfig = {
@@ -323,7 +315,7 @@ class Play extends Phaser.Scene {
         menuConfig).setOrigin(0.5, 0.5);
         this.return = this.add.text(game.config.width/2, 380, "total times jumped: " + this.timesJumped,
         menuConfig).setOrigin(0.5, 0.5);
-        this.return = this.add.text(game.config.width/2, 420, 'MENU',
+        this.return = this.add.text(game.config.width/2, 430, 'MENU',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive
         this.return.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.return.width,

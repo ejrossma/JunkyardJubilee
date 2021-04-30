@@ -125,7 +125,7 @@ class Play extends Phaser.Scene {
         {
             this.player.anims.play('robotRun', true);  // placeholder walk animation spot
             this.jumps = this.MAX_JUMPS;
-            this.jumping = false
+            this.jumping = false;
         } else {
             this.player.setFrame('robotRun0001');
         }
@@ -136,9 +136,10 @@ class Play extends Phaser.Scene {
             this.player.body.velocity.y = this.JUMP_VELOCITY;
             if(this.firstJump){
                 this.sound.play('jumpSound');           //play the jump sound
-                console.log("welp");
+                console.log("welp");        
+                this.firstJump = false;
+                this.stopSound = this.time.delayedCall (200, () => { this.firstJump = true; });
             }
-            this.firstJump = false;
             this.jumping = true;
             this.player.isGrounded = false;
         }

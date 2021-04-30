@@ -79,10 +79,12 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.player, this.ground);
         //adds collider with player and meteors
         this.physics.add.collider(this.ground, this.meteorGroup);
+        //score variables/misc
         this.obstaclesJumped = 0;
         this.distanceTravelled = 0;
         this.obstaclesDestroyed = 0;
         this.timesJumped = 0;
+        this.firstJump = true;
     }
 
     update(time, delta) {
@@ -121,9 +123,13 @@ class Play extends Phaser.Scene {
         if (!this.gameOver && this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.space, 150)) 
         {
             this.player.body.velocity.y = this.JUMP_VELOCITY;
+            if(this.firstJump){
+                this.sound.play('jumpSound');           //play the jump sound
+                console.log("welp");
+            }
+            this.firstJump = false;
             this.jumping = true;
             this.player.isGrounded = false;
-            this.timesJumped += 1;
         }
 
         // when key is let go of, allow for player to jump again
@@ -131,6 +137,9 @@ class Play extends Phaser.Scene {
         {
             this.jumps--;
             this.jumping = false;
+            this.timesJumped += 1;
+            this.firstJump = true;
+            console.log(this.timesJumped);
         }
         // deploy the obstacles in the game **conditions: game is not over && an object is not deployed (a buffer boolean)**
         if (!this.gameOver && this.obstacleDeployed == false)
@@ -218,6 +227,7 @@ class Play extends Phaser.Scene {
             fallingObs.on('pointerdown', () => {
                 fallingObs.destroyObj();
                 this.obstaclesDestroyed += 1;
+                this.sound.play('destroySound');
             });
         }
         else{
@@ -228,6 +238,7 @@ class Play extends Phaser.Scene {
             fallingObs.on('pointerdown', () => {
                 fallingObs.destroyObj();
                 this.obstaclesDestroyed += 1;
+                this.sound.play('destroySound');
             });
             fallingObs.wheel = true;
         }
@@ -251,14 +262,14 @@ class Play extends Phaser.Scene {
         console.log("total times jumped: " + this.timesJumped);
         //change crosshair back to cursor
         this.input.setDefaultCursor('url(assets/crosshair.png), pointer');
-        this.lose = this.add.tileSprite(400, 150, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
+        this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameOver = true;
         console.log('lose');
         // When player loses, make it so they can return to to the menu by pressing the button.
         //temp until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',
-            fontSize: '28px',
+            fontSize: '25px',
             backgroundColor: '#ffffff',
             color: '#000000',
             align: 'right',
@@ -268,7 +279,15 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-        this.return = this.add.text(game.config.width/2, 350, 'MENU',
+        this.return = this.add.text(game.config.width/2, 260, "obstacles jumped: " + this.obstaclesJumped,
+        menuConfig).setOrigin(0.5, 0.5);
+        this.return = this.add.text(game.config.width/2, 300, "obstacles destroyed: " + this.obstaclesDestroyed,
+        menuConfig).setOrigin(0.5, 0.5);
+        this.return = this.add.text(game.config.width/2, 340, "distance travelled: " + Math.floor(this.distanceTravelled) + " ft",
+        menuConfig).setOrigin(0.5, 0.5);
+        this.return = this.add.text(game.config.width/2, 380, "total times jumped: " + this.timesJumped,
+        menuConfig).setOrigin(0.5, 0.5);
+        this.return = this.add.text(game.config.width/2, 420, 'MENU',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive
         this.return.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.return.width,

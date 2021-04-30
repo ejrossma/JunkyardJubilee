@@ -4,7 +4,7 @@ class Menu extends Phaser.Scene {
     }
     
     preload(){
-        // load sprites/images
+        // load sprites/images/audio
         this.load.image('ground', './assets/pngs/junkyardGround.png');
         this.load.image('tire', './assets/pngs/tire.png');
         this.load.image('carDoor', './assets/pngs/carDoor.png');
@@ -16,6 +16,8 @@ class Menu extends Phaser.Scene {
         this.load.image('gameOverCard', './assets/pngs/background/gameOverCard.png');
         this.load.image('carObject', './assets/pngs/carObject.png');
         this.load.image('boxObject', './assets/pngs/boxObject.png');
+        this.load.audio('destroySound', './assets/PewPew.wav');
+        this.load.audio('jumpSound', './assets/jumpSound.wav');
 
         this.load.atlas('junkyardAtlas', 'assets/textureAtlas.png', 'assets/textureAtlas.json');
     }

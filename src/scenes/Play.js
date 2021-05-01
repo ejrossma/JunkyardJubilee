@@ -198,7 +198,7 @@ class Play extends Phaser.Scene {
         this.player.body.velocity.y = this.JUMP_VELOCITY;
         this.gameOver = true;
         this.loseScreen();
-        console.log('game over');
+        //console.log('game over');
     }
 
     // add an obstacle
@@ -213,7 +213,7 @@ class Play extends Phaser.Scene {
         {
             this.whichObstacle = Phaser.Math.Between(2,2);
         }
-        console.log("Obstacle Deployed");
+        //console.log("Obstacle Deployed");
         // check which obstacle is being spawned
         if (this.whichObstacle == 1)
         {
@@ -280,10 +280,10 @@ class Play extends Phaser.Scene {
     }
     adjustSpeed() {
         if (this.SCROLL_SPEED < 13) {
-            console.log("speed increased");
+            //console.log("speed increased");
             this.speedMultiplier += 1;
             this.SCROLL_SPEED = this.BASE_SPEED + (0.2 * this.speedMultiplier);
-            console.log(this.SCROLL_SPEED);
+            //console.log(this.SCROLL_SPEED);
         }
     }
 

@@ -8,7 +8,7 @@ class Meteor extends Phaser.Physics.Arcade.Sprite {
         this.grounded = false;
         this.randomSpin = Phaser.Math.Between(10, 25) * 10;
         this.wheel = false;
-        console.log("made a meteor");
+        //console.log("made a meteor");
     }
 
     update(time, delta){
@@ -20,7 +20,7 @@ class Meteor extends Phaser.Physics.Arcade.Sprite {
                 this.body.angularVelocity = this.randomSpin;
             }
             if(this.y > 370){
-                console.log("dropped");
+                //console.log("dropped");
                 this.grounded = true;
             }
         }

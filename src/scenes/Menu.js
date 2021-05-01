@@ -30,6 +30,8 @@ class Menu extends Phaser.Scene {
         this.back3 = this.add.tileSprite(0, 0, 800, 480, 'back3').setOrigin(0, 0);
         this.back4 = this.add.tileSprite(0, 0, 800, 480, 'back4').setOrigin(0, 0);
         this.back5 = this.add.tileSprite(0, 0, 800, 480, 'back5').setOrigin(0, 0);
+
+
         //Set Temporary text boxes until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',

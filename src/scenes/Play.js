@@ -3,6 +3,17 @@ class Play extends Phaser.Scene {
         super("playScene");
     }
 
+    preload() {
+        //add explosion animation
+        this.load.spritesheet('smallexplosion', './assets/small_explosion64.png', {
+            frameWidth: 64,
+            frameHeight: 64,
+            startFrame: 0,
+            endFrame: 8
+        });
+
+    }
+
     create() {
         //set cursor
         this.input.setDefaultCursor('url(assets/crosshair.png) 32.5 32.5, pointer');
@@ -80,6 +91,17 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
         this.player.anims.play('robotRun');
+
+        //meteor explosion
+        this.anims.create({
+            key: 'smallexplode',
+            frames: this.anims.generateFrameNumbers('smallexplosion', {
+                start: 0,
+                end: 8,
+                first: 0
+            }),
+            frameRate: 30
+        });
         // cursor key input (aka keyboard keys which are written in lowercase)
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -259,9 +281,14 @@ class Play extends Phaser.Scene {
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
             fallingObs.on('pointerdown', () => {
-                fallingObs.destroyObj();
-                this.obstaclesDestroyed += 1;
+                let explode = this.add.sprite(fallingObs.x - 32, fallingObs.y - 32, 'smallexplode').setOrigin(0);
+                explode.anims.play('smallexplode');
                 this.sound.play('destroySound');
+                this.obstaclesDestroyed += 1;
+                fallingObs.destroyObj();
+                explode.on('animationcomplete', () => {
+                    explode.destroy();
+                });
             });
         }
         else{
@@ -271,11 +298,16 @@ class Play extends Phaser.Scene {
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
             fallingObs.on('pointerdown', () => {
-                fallingObs.destroyObj();
-                this.obstaclesDestroyed += 1;
+                let explode = this.add.sprite(fallingObs.x - 32, fallingObs.y - 32, 'smallexplode').setOrigin(0);
+                explode.anims.play('smallexplode');
                 this.sound.play('destroySound');
-            });
+                this.obstaclesDestroyed += 1;
+                fallingObs.destroyObj();
+                explode.on('animationcomplete', () => {
+                    explode.destroy();
+                });
             fallingObs.wheel = true;
+            });
         }
 
         

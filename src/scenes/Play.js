@@ -131,7 +131,7 @@ class Play extends Phaser.Scene {
         this.back3.tilePositionX -= 0.1*deltaMultiplier;
         this.back4.tilePositionX -= 0.15*deltaMultiplier;
         // Check if collides
-        this.physics.world.collide(this.player, this.meteorGroup, this.loseScreen, null, this);
+        this.physics.world.collide(this.player, this.meteorGroup, this.playerHit, null, this);
         this.physics.world.collide(this.player, this.jumpObsGroup, this.playerHit, null, this);
         
         // update tiles (aka the ground scrolls)
@@ -224,6 +224,7 @@ class Play extends Phaser.Scene {
     // when player is hit
     playerHit()
     {
+        this.sound.play('hitSound');
         this.player.body.velocity.y = this.JUMP_VELOCITY;
         this.gameOver = true;
         this.loseScreen();
@@ -315,12 +316,25 @@ class Play extends Phaser.Scene {
             this.obstacleDeployed = false;
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
+            fallingObs.on('pointerover', () => {
+                this.player.buddy.setTexture('shootMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair_fire.png) 32.5 32.5, pointer');
+            });
+            fallingObs.on('pointerout', () => {
+                this.player.buddy.setTexture('safeMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
+            });
             fallingObs.on('pointerdown', () => {
                 let explode = this.add.sprite(fallingObs.x - 32, fallingObs.y - 32, 'smallexplode').setOrigin(0);
                 explode.anims.play('smallexplode');
                 this.sound.play('destroySound');
                 this.obstaclesDestroyed += 1;
                 fallingObs.destroyObj();
+                this.player.buddy.setTexture('safeMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
                 explode.on('animationcomplete', () => {
                     explode.destroy();
                 });
@@ -342,7 +356,7 @@ class Play extends Phaser.Scene {
     
     loseScreen(){
         //change crosshair back to cursor
-        this.input.setDefaultCursor('url(assets/crosshair.png) 32.5 32.5, pointer');
+        this.input.setDefaultCursor();
         this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameOver = true;
         // When player loses, make it so they can return to to the menu by pressing the button.
@@ -373,6 +387,7 @@ class Play extends Phaser.Scene {
         this.return.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.return.width,
              this.return.height), Phaser.Geom.Rectangle.Contains);
         this.return.on('pointerdown', () => {
+            this.sound.play('select');
             this.scene.start('menuScene');
         });
         //this.scene.start('menuScene');

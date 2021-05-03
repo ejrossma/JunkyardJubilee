@@ -35,11 +35,16 @@ class Menu extends Phaser.Scene {
         this.back4 = this.add.tileSprite(0, 0, 800, 480, 'back4').setOrigin(0, 0);
         this.back5 = this.add.tileSprite(0, 0, 800, 480, 'back5').setOrigin(0, 0);
 
-
+        this.credits = this.add.text(game.config.width/2, game.config.height*0.97, 'Game created by Elijah Rossman, Kevin Lewis, Kristopher Yu',{
+            fontFamily: 'Courier',
+            fontSize: '15px',
+            color: '#ffffff',
+            align: 'left',
+        }).setOrigin(0.5, 0.5);
         //Set Temporary text boxes until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',
-            fontSize: '28px',
+            fontSize: '56px',
             backgroundColor: '#ffffff',
             color: '#000000',
             align: 'right',
@@ -50,7 +55,7 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
         //the play button
-        this.playButton = this.add.text(game.config.width*0.25, game.config.height*0.7, 'START',
+        this.playButton = this.add.text(game.config.width*0.20, game.config.height*0.7, 'START',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive so that it brings you to play scene
         this.playButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.playButton.width,
@@ -60,7 +65,7 @@ class Menu extends Phaser.Scene {
             this.scene.start('playScene');
         });
         //instructions button
-        this.instructionButton = this.add.text(game.config.width*0.75, game.config.height*0.7, 'HOW TO PLAY',
+        this.instructionButton = this.add.text(game.config.width*0.7, game.config.height*0.7, 'HOW TO PLAY',
         menuConfig).setOrigin(0.5, 0.5);
         //set button as interactive
         this.instructionButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.instructionButton.width,
@@ -74,7 +79,7 @@ class Menu extends Phaser.Scene {
             //add tutorial card
             this.tutorial = this.add.tileSprite(0, 0, 800, 480, 'instructions').setOrigin(0, 0);
             //set menu button
-            this.menuButton = this.add.text(game.config.width*0.75, game.config.height*0.7, 'MENU',
+            this.menuButton = this.add.text(game.config.width*0.8, game.config.height*0.8, 'MENU',
             menuConfig).setOrigin(0.5, 0.5);
             //set interactive so that it brings you to menu scene
             this.menuButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.menuButton.width,

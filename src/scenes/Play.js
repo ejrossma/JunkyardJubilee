@@ -381,7 +381,7 @@ class Play extends Phaser.Scene {
         menuConfig).setOrigin(0.5, 0.5);
         this.return = this.add.text(game.config.width/2, 380, "total times jumped: " + this.timesJumped,
         menuConfig).setOrigin(0.5, 0.5);
-        this.return = this.add.text(game.config.width/2, 430, 'MENU',
+        this.return = this.add.text(game.config.width*0.4, 430, 'MENU',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive
         this.return.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.return.width,
@@ -390,7 +390,16 @@ class Play extends Phaser.Scene {
             this.sound.play('select');
             this.scene.start('menuScene');
         });
-        //this.scene.start('menuScene');
+        //add restart button
+        this.restartGame = this.add.text(game.config.width*0.58, 430, 'RESTART',
+        menuConfig).setOrigin(0.5, 0.5);
+        //set interactive
+        this.restartGame.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.restartGame.width,
+             this.restartGame.height), Phaser.Geom.Rectangle.Contains);
+        this.restartGame.on('pointerdown', () => {
+            this.sound.play('select');
+            this.scene.restart();
+        });
     }
 
     adjustBuddy() {

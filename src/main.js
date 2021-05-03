@@ -26,7 +26,9 @@ let borderSize = game.config.height / 15;
 let playerPadding = borderSize / 3;
 let cursors;
 // global speed variable
-let GAME_SPEED = 4;
+let SPEED_MULTIPLIER;
+let GAME_SPEED;
+let MAX_SPEED;
 //High score
 let topScore = 0;
 const SCALE = 0.5;

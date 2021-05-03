@@ -16,7 +16,7 @@ class jumpObstacle extends Phaser.Physics.Arcade.Sprite {
         // check whether anothe jump obstacle can be spawned
         if (this.locationChecked == false)
         {
-            if (this.x <= game.config.width/1.25)
+            if (this.x <= game.config.width/1.30)
             {
                 //console.log('jump obstacle allowed');
                 this.locationChecked = true;

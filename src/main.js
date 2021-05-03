@@ -25,6 +25,8 @@ let game = new Phaser.Game(config);
 let borderSize = game.config.height / 15;
 let playerPadding = borderSize / 3;
 let cursors;
+// global speed variable
+let GAME_SPEED = 4;
 //High score
 let topScore = 0;
 const SCALE = 0.5;

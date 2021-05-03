@@ -32,13 +32,12 @@ class Play extends Phaser.Scene {
         // variables and settings
         this.JUMP_VELOCITY = -800;              // lower -> cant jump as high, higher -> can jump higher
         this.MAX_JUMPS = 1;                     // amount of jumps the player can do (default to 1)
-        this.BASE_SPEED = 4;
-        this.SCROLL_SPEED = 4;                  // how fast the tiles are moving below
+        this.BASE_SPEED = GAME_SPEED;
+        this.SCROLL_SPEED = GAME_SPEED;                  // how fast the tiles are moving below
         this.physics.world.gravity.y = 2600;    // this was default physics, I changed it to higher and it didnt work, so idk if we can change
         this.whichObstacle = 1;     // choose obstacle
         this.obstacleDeployed = true;                      // bool that controls when obstacles spawn
         this.gameOver = false;                              // game over boolean
-        this.OBSTACLE_SPEED = -280;                         // speed that the jumping obstacles move
         this.speedMultiplier = 1;
         this.MAX_OBSTACLES = 0;                  // maximum number of obstacles that can be spawned at a time
         this.CURRENT_OBSTACLES_AMT = 0;          // how many obstacles are currently spawned

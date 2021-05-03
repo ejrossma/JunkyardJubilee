@@ -70,7 +70,7 @@ class Menu extends Phaser.Scene {
             //remove old play button and instruction button
             this.playButton.destroy();
             this.instructionButton.destroy();
-            this.sound.play('destroySound');
+            this.sound.play('select');
             //add tutorial card
             this.tutorial = this.add.tileSprite(0, 0, 800, 480, 'instructions').setOrigin(0, 0);
             //set menu button
@@ -80,7 +80,7 @@ class Menu extends Phaser.Scene {
             this.menuButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.menuButton.width,
                  this.menuButton.height), Phaser.Geom.Rectangle.Contains);
             this.menuButton.on('pointerdown', () => {
-                this.sound.play('destroySound');
+                this.sound.play('select');
                 this.scene.restart();
             });
        });

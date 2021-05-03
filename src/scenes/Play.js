@@ -241,9 +241,21 @@ class Play extends Phaser.Scene {
         {
             this.MAX_OBSTACLES = 4;
         }
-        else if (!this.gameOver && this.SCROLL_SPEED >=13)
+        else if (!this.gameOver && this.SCROLL_SPEED >=11  && this.SCROLL_SPEED < 14)
         {
             this.MAX_OBSTACLES = 5;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=14  && this.SCROLL_SPEED < 16)
+        {
+            this.MAX_OBSTACLES = 6;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=16  && this.SCROLL_SPEED < 18)
+        {
+            this.MAX_OBSTACLES = 7;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=18)
+        {
+            this.MAX_OBSTACLES = 8;
         }
 
         // fade in music
@@ -390,6 +402,7 @@ class Play extends Phaser.Scene {
 
         
     }
+    
     adjustSpeed() {
         if (this.SCROLL_SPEED < MAX_SPEED) {
             //console.log("speed increased");

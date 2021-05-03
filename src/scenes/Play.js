@@ -34,13 +34,12 @@ class Play extends Phaser.Scene {
         // variables and settings
         this.JUMP_VELOCITY = -800;              // lower -> cant jump as high, higher -> can jump higher
         this.MAX_JUMPS = 1;                     // amount of jumps the player can do (default to 1)
-        this.BASE_SPEED = 4;
-        this.SCROLL_SPEED = 4;                  // how fast the tiles are moving below
+        this.BASE_SPEED = GAME_SPEED;
+        this.SCROLL_SPEED = GAME_SPEED;                  // how fast the tiles are moving below
         this.physics.world.gravity.y = 2600;    // this was default physics, I changed it to higher and it didnt work, so idk if we can change
         this.whichObstacle = 1;     // choose obstacle
         this.obstacleDeployed = true;                      // bool that controls when obstacles spawn
         this.gameOver = false;                              // game over boolean
-        this.OBSTACLE_SPEED = -280;                         // speed that the jumping obstacles move
         this.speedMultiplier = 1;
         this.MAX_OBSTACLES = 0;                  // maximum number of obstacles that can be spawned at a time
         this.CURRENT_OBSTACLES_AMT = 0;          // how many obstacles are currently spawned
@@ -124,6 +123,7 @@ class Play extends Phaser.Scene {
         this.timesJumped = 0;
         this.firstJump = true;
 
+<<<<<<< HEAD
         this.title = this.add.image(game.config.width/2, 0, 'title').setOrigin(0.5, 0);
         //ui text style
         let uiConfig = {
@@ -142,6 +142,16 @@ class Play extends Phaser.Scene {
         this.distScore = this.add.text(playerPadding * 2, game.config.height - playerPadding * 3, `Distance: ${Math.round(this.distanceTravelled)}ft`, uiConfig);
         this.temp = this.speedMultiplier * 0.2 + 4;
         this.distMultiplier = this.add.text(game.config.width - playerPadding * 9, game.config.height - playerPadding * 3, `x${this.temp}`, uiConfig);
+=======
+        // music
+        // this.MAX_VOL = 0.125;
+        // this.VOL = 0;
+        // this.music = this.sound.add('BGM');
+        // this.music.setLoop(true);
+        // this.music.setVolume(this.VOL);
+        // this.music.play();
+
+>>>>>>> e582c32e9c5ad02e2dd416538c2901cdaf4bc79c
     }
 
     update(time, delta) {
@@ -241,16 +251,34 @@ class Play extends Phaser.Scene {
         {
             this.MAX_OBSTACLES = 5;
         }
+
+        // fade in music
+        // if (!this.gameOver && this.VOL < this.MAX_VOL)
+        // {
+        //     this.VOL += .0001;
+        //     this.music.setVolume(this.VOL);
+        //     //console.log(this.VOL);
+        // }
+        // else if (this.gameOver == true && this.VOL > 0)
+        // {
+        //     this.VOL -= .001;
+        //     this.music.setVolume(this.VOL);
+        // }
+        // else if (this.gameOver == true && this.VOL <= 0)
+        // {
+        //     this.music.stop();
+        // }
     }
 
     // when player is hit
     playerHit()
     {
-        this.sound.play('hitSound');
-        this.player.body.velocity.y = this.JUMP_VELOCITY;
-        this.gameOver = true;
-        this.loseScreen();
-        //console.log('game over');
+        if(this.gameOver == false){
+            this.player.body.velocity.y = this.JUMP_VELOCITY;
+            this.gameOver = true;
+            this.loseScreen();
+            //console.log('game over');
+        }
     }
 
     // add an obstacle
@@ -336,6 +364,7 @@ class Play extends Phaser.Scene {
             let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'tire').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
             this.obstacleDeployed = false;
+            fallingObs.wheel = true;
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
             fallingObs.on('pointerover', () => {
@@ -360,7 +389,6 @@ class Play extends Phaser.Scene {
                 explode.on('animationcomplete', () => {
                     explode.destroy();
                 });
-            fallingObs.wheel = true;
             });
         }
 
@@ -377,6 +405,8 @@ class Play extends Phaser.Scene {
 
     
     loseScreen(){
+        //play lose sound
+        this.sound.play('hitSound');
         //change crosshair back to cursor
         this.input.setDefaultCursor();
         this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
@@ -407,16 +437,26 @@ class Play extends Phaser.Scene {
         menuConfig).setOrigin(0.5, 0.5);
         this.return = this.add.text(game.config.width/2, 380, "total times jumped: " + this.timesJumped,
         menuConfig).setOrigin(0.5, 0.5);
-        this.return = this.add.text(game.config.width/2, 430, 'MENU',
+        this.return = this.add.text(game.config.width*0.4, 430, 'MENU',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive
         this.return.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.return.width,
              this.return.height), Phaser.Geom.Rectangle.Contains);
         this.return.on('pointerdown', () => {
             this.sound.play('select');
+            //this.music.stop();
             this.scene.start('menuScene');
         });
-        //this.scene.start('menuScene');
+        //add restart button
+        this.restartGame = this.add.text(game.config.width*0.58, 430, 'RESTART',
+        menuConfig).setOrigin(0.5, 0.5);
+        //set interactive
+        this.restartGame.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.restartGame.width,
+             this.restartGame.height), Phaser.Geom.Rectangle.Contains);
+        this.restartGame.on('pointerdown', () => {
+            this.sound.play('select');
+            this.scene.restart();
+        });
     }
 
     adjustBuddy() {

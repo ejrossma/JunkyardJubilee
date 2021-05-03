@@ -13,13 +13,16 @@ class Menu extends Phaser.Scene {
         this.load.image('back3', './assets/pngs/background/tempBackground3.png');
         this.load.image('back4', './assets/pngs/background/tempBackground4.png');
         this.load.image('back5', './assets/pngs/background/tempBackground5.png');
+        this.load.image('titleCard', './assets/pngs/background/titleCard.png');
         this.load.image('gameOverCard', './assets/pngs/background/gameOverCard.png');
+        this.load.image('instructions', './assets/pngs/background/instructions.png');
         this.load.image('carObject', './assets/pngs/carObject.png');
         this.load.image('boxObject', './assets/pngs/boxObject.png');
         this.load.audio('destroySound', './assets/PewPew.wav');
         this.load.audio('jumpSound', './assets/jumpSound.wav');
         this.load.audio('hitSound', './assets/hitSound.wav');
         this.load.audio('select', './assets/select.wav');
+        //this.load.audio('BGM', './assets/JunkYardJubileeBGM.wav');
 
         this.load.atlas('junkyardAtlas', 'assets/textureAtlas.png', 'assets/textureAtlas.json');
     }
@@ -33,11 +36,16 @@ class Menu extends Phaser.Scene {
         this.back4 = this.add.tileSprite(0, 0, 800, 480, 'back4').setOrigin(0, 0);
         this.back5 = this.add.tileSprite(0, 0, 800, 480, 'back5').setOrigin(0, 0);
 
-
+        this.credits = this.add.text(game.config.width/2, game.config.height*0.97, 'Game created by Elijah Rossman, Kevin Lewis, Kristopher Yu',{
+            fontFamily: 'Courier',
+            fontSize: '15px',
+            color: '#ffffff',
+            align: 'left',
+        }).setOrigin(0.5, 0.5);
         //Set Temporary text boxes until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',
-            fontSize: '28px',
+            fontSize: '56px',
             backgroundColor: '#ffffff',
             color: '#000000',
             align: 'right',
@@ -47,19 +55,48 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-        this.title = this.add.text(game.config.width/2, game.config.height*0.25, 'Junkyard Jubilee',
+        //the play button
+        this.playButton = this.add.text(game.config.width*0.20, game.config.height*0.7, 'START',
         menuConfig).setOrigin(0.5, 0.5);
-        this.playButton = this.add.text(game.config.width/2, game.config.height*0.5, 'PLAY',
-        menuConfig).setOrigin(0.5, 0.5);
-        //set interactive
+        //set interactive so that it brings you to play scene
         this.playButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.playButton.width,
              this.playButton.height), Phaser.Geom.Rectangle.Contains);
         this.playButton.on('pointerdown', () => {
             this.sound.play('select');
             this.scene.start('playScene');
         });
+        //instructions button
+        this.instructionButton = this.add.text(game.config.width*0.7, game.config.height*0.7, 'HOW TO PLAY',
+        menuConfig).setOrigin(0.5, 0.5);
+        //set button as interactive
+        this.instructionButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.instructionButton.width,
+            this.instructionButton.height), Phaser.Geom.Rectangle.Contains);
+        //set commands to do when pressed
+        this.instructionButton.on('pointerdown', () => {
+            //remove old play button and instruction button
+            this.playButton.destroy();
+            this.instructionButton.destroy();
+            this.sound.play('select');
+            //add tutorial card
+            this.tutorial = this.add.tileSprite(0, 0, 800, 480, 'instructions').setOrigin(0, 0);
+            //set menu button
+            this.menuButton = this.add.text(game.config.width*0.8, game.config.height*0.8, 'MENU',
+            menuConfig).setOrigin(0.5, 0.5);
+            //set interactive so that it brings you to menu scene
+            this.menuButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.menuButton.width,
+                 this.menuButton.height), Phaser.Geom.Rectangle.Contains);
+            this.menuButton.on('pointerdown', () => {
+                this.sound.play('select');
+                this.scene.restart();
+            });
+       });
+       
+        //add title card
+        this.title = this.add.tileSprite(400, 125, 720, 210, 'titleCard').setOrigin(0.5, 0.5);
     }
+
     update(time, delta){
+        //paralax background
         let deltaMultiplier = (delta/16.66667);
         this.back1.tilePositionX -= 0.05*deltaMultiplier;
         this.back2.tilePositionX -= 0.07*deltaMultiplier;

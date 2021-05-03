@@ -14,14 +14,12 @@ class Play extends Phaser.Scene {
         //add robot buddy
         this.load.image('safeMode', './assets/pngs/shootSphere.png');
         this.load.image('shootMode', './assets/pngs/shootSphereFire.png');
+        this.load.image('firing', './assets/pngs/shootSphereFiring.png');
 
         this.load.image('title', './assets/pngs/play_title.png');
     }
 
     create() {
-        //set cursor
-        this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
-
         //Set background color
         this.cameras.main.setBackgroundColor('#d6b894'); 
         //set background
@@ -140,7 +138,7 @@ class Play extends Phaser.Scene {
         //add distance + multiplier at the top
         this.distScore = this.add.text(playerPadding * 2, game.config.height - playerPadding * 3, `Distance: ${Math.round(this.distanceTravelled)}ft`, uiConfig);
         this.temp = this.speedMultiplier * 0.2 + 4;
-        this.distMultiplier = this.add.text(game.config.width - playerPadding * 9, game.config.height - playerPadding * 3, `x${this.temp}`, uiConfig);
+        this.distMultiplier = this.add.text(game.config.width - playerPadding * 18, game.config.height - playerPadding * 3, `Speed: x${this.temp}`, uiConfig);
         // music
         // this.MAX_VOL = 0.125;
         // this.VOL = 0;
@@ -349,11 +347,12 @@ class Play extends Phaser.Scene {
                 this.sound.play('destroySound');
                 this.obstaclesDestroyed += 1;
                 fallingObs.destroyObj();
-                this.player.buddy.setTexture('safeMode');
+                this.player.buddy.setTexture('firing');
                 //set cursor
                 this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
                 explode.on('animationcomplete', () => {
                     explode.destroy();
+                    this.player.buddy.setTexture('safeMode');
                 });
             });
         }
@@ -380,11 +379,12 @@ class Play extends Phaser.Scene {
                 this.sound.play('destroySound');
                 this.obstaclesDestroyed += 1;
                 fallingObs.destroyObj();
-                this.player.buddy.setTexture('safeMode');
+                this.player.buddy.setTexture('firing');
                 //set cursor
                 this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
                 explode.on('animationcomplete', () => {
                     explode.destroy();
+                    this.player.buddy.setTexture('safeMode');
                 });
             });
         }
@@ -457,20 +457,17 @@ class Play extends Phaser.Scene {
     }
 
     adjustBuddy() {
-        if (this.player.buddy.x < this.player.x + 20)
-            this.player.buddy.x+=2;
-        else if (this.player.buddy.x > this.player.x + 30)
-            this.player.buddy.x-=2;
-
-        if (this.player.buddy.y < this.player.y - 30)
+        if (this.player.buddy.y < this.player.y - 30) {
             this.player.buddy.y+=2;
-        else if (this.player.buddy.y > this.player.y - 20)
+        }
+        else if (this.player.buddy.y > this.player.y - 20) {
             this.player.buddy.y-=2;
+        }
     }
 
     adjustScores() {
         this.distScore.text = `Distance: ${Math.round(this.distanceTravelled)}ft`;
         this.temp = this.speedMultiplier * 0.2 + 4;
-        this.distMultiplier.text = `x${this.temp}`;
+        this.distMultiplier.text = `Speed: x${this.temp}`;
     }
 }

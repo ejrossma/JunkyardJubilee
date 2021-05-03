@@ -46,28 +46,56 @@ class Menu extends Phaser.Scene {
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '56px',
-            backgroundColor: '#ffffff',
+            backgroundColor: '#9e9e9e',
             color: '#000000',
-            align: 'right',
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 0
+            fixedWidth: 200
         }
-        //the play button
-        this.playButton = this.add.text(game.config.width*0.20, game.config.height*0.7, 'START',
+        let instructionConfig = {
+            fontFamily: 'Courier',
+            fontSize: '56px',
+            backgroundColor: '#9e9e9e',
+            color: '#000000',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 400
+        }
+        //the normal play button
+        this.playButton = this.add.text(game.config.width*0.25, game.config.height*0.7, 'Normal',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive so that it brings you to play scene
         this.playButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.playButton.width,
              this.playButton.height), Phaser.Geom.Rectangle.Contains);
         this.playButton.on('pointerdown', () => {
+            GAME_SPEED = 4;
+            SPEED_MULTIPLIER = 1;
+            MAX_SPEED = 13;
+            this.sound.play('select');
+            this.scene.start('playScene');
+        });
+        //the hard play button
+        this.playButton = this.add.text(game.config.width*0.75, game.config.height*0.7, 'Hard',
+        menuConfig).setOrigin(0.5, 0.5);
+        //set interactive so that it brings you to play scene
+        this.playButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.playButton.width,
+             this.playButton.height), Phaser.Geom.Rectangle.Contains);
+        this.playButton.on('pointerdown', () => {
+            GAME_SPEED = 4;
+            SPEED_MULTIPLIER = 2;
+            MAX_SPEED = 18;
             this.sound.play('select');
             this.scene.start('playScene');
         });
         //instructions button
-        this.instructionButton = this.add.text(game.config.width*0.7, game.config.height*0.7, 'HOW TO PLAY',
-        menuConfig).setOrigin(0.5, 0.5);
+        this.instructionButton = this.add.text(game.config.width/2, game.config.height*0.87, 'HOW TO PLAY',
+        instructionConfig).setOrigin(0.5, 0.5);
         //set button as interactive
         this.instructionButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.instructionButton.width,
             this.instructionButton.height), Phaser.Geom.Rectangle.Contains);

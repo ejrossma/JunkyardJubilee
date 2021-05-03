@@ -392,9 +392,9 @@ class Play extends Phaser.Scene {
         
     }
     adjustSpeed() {
-        if (this.SCROLL_SPEED < 13) {
+        if (this.SCROLL_SPEED < MAX_SPEED) {
             //console.log("speed increased");
-            this.speedMultiplier += 1;
+            this.speedMultiplier += SPEED_MULTIPLIER;
             this.SCROLL_SPEED = this.BASE_SPEED + (0.2 * this.speedMultiplier);
             //console.log(this.SCROLL_SPEED);
         }

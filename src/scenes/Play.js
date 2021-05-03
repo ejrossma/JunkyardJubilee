@@ -13,7 +13,9 @@ class Play extends Phaser.Scene {
         });
         //add robot buddy
         this.load.image('safeMode', './assets/pngs/shootSphere.png');
-        this.load.image('shootMode', './assets/pngs/shootSphereFire.png')
+        this.load.image('shootMode', './assets/pngs/shootSphereFire.png');
+
+        this.load.image('title', './assets/pngs/play_title.png');
     }
 
     create() {
@@ -32,13 +34,12 @@ class Play extends Phaser.Scene {
         // variables and settings
         this.JUMP_VELOCITY = -800;              // lower -> cant jump as high, higher -> can jump higher
         this.MAX_JUMPS = 1;                     // amount of jumps the player can do (default to 1)
-        this.BASE_SPEED = 4;
-        this.SCROLL_SPEED = 4;                  // how fast the tiles are moving below
+        this.BASE_SPEED = GAME_SPEED;
+        this.SCROLL_SPEED = GAME_SPEED;                  // how fast the tiles are moving below
         this.physics.world.gravity.y = 2600;    // this was default physics, I changed it to higher and it didnt work, so idk if we can change
         this.whichObstacle = 1;     // choose obstacle
         this.obstacleDeployed = true;                      // bool that controls when obstacles spawn
         this.gameOver = false;                              // game over boolean
-        this.OBSTACLE_SPEED = -280;                         // speed that the jumping obstacles move
         this.speedMultiplier = 1;
         this.MAX_OBSTACLES = 0;                  // maximum number of obstacles that can be spawned at a time
         this.CURRENT_OBSTACLES_AMT = 0;          // how many obstacles are currently spawned
@@ -122,6 +123,24 @@ class Play extends Phaser.Scene {
         this.timesJumped = 0;
         this.firstJump = true;
 
+        this.title = this.add.image(game.config.width/2, 0, 'title').setOrigin(0.5, 0);
+        //ui text style
+        let uiConfig = {
+            fontFamily: 'Courier',
+            fontSize: '25px',
+            backgroundColor: '#9e9e9e',
+            color: '#000000',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
+        }
+        //add distance + multiplier at the top
+        this.distScore = this.add.text(playerPadding * 2, game.config.height - playerPadding * 3, `Distance: ${Math.round(this.distanceTravelled)}ft`, uiConfig);
+        this.temp = this.speedMultiplier * 0.2 + 4;
+        this.distMultiplier = this.add.text(game.config.width - playerPadding * 9, game.config.height - playerPadding * 3, `x${this.temp}`, uiConfig);
         // music
         // this.MAX_VOL = 0.125;
         // this.VOL = 0;
@@ -153,6 +172,7 @@ class Play extends Phaser.Scene {
                 this.player.isGrounded = true;
             }
             this.adjustBuddy();
+            this.adjustScores();
         }
         
         // if grounded, allow them to jump
@@ -388,12 +408,16 @@ class Play extends Phaser.Scene {
         this.input.setDefaultCursor();
         this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameOver = true;
+        //hide play screen stuff
+        this.title.alpha = 0;
+        this.distScore.alpha = 0;
+        this.distMultiplier.alpha = 0;
         // When player loses, make it so they can return to to the menu by pressing the button.
         //temp until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '25px',
-            backgroundColor: '#ffffff',
+            backgroundColor: '#9e9e9e',
             color: '#000000',
             align: 'right',
             padding: {
@@ -442,5 +466,11 @@ class Play extends Phaser.Scene {
             this.player.buddy.y+=2;
         else if (this.player.buddy.y > this.player.y - 20)
             this.player.buddy.y-=2;
+    }
+
+    adjustScores() {
+        this.distScore.text = `Distance: ${Math.round(this.distanceTravelled)}ft`;
+        this.temp = this.speedMultiplier * 0.2 + 4;
+        this.distMultiplier.text = `x${this.temp}`;
     }
 }

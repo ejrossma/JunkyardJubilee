@@ -13,7 +13,9 @@ class Play extends Phaser.Scene {
         });
         //add robot buddy
         this.load.image('safeMode', './assets/pngs/shootSphere.png');
-        this.load.image('shootMode', './assets/pngs/shootSphereFire.png')
+        this.load.image('shootMode', './assets/pngs/shootSphereFire.png');
+
+        this.load.image('title', './assets/pngs/play_title.png');
     }
 
     create() {
@@ -121,6 +123,25 @@ class Play extends Phaser.Scene {
         this.obstaclesDestroyed = 0;
         this.timesJumped = 0;
         this.firstJump = true;
+
+        this.title = this.add.image(game.config.width/2, 0, 'title').setOrigin(0.5, 0);
+        //ui text style
+        let uiConfig = {
+            fontFamily: 'Courier',
+            fontSize: '25px',
+            backgroundColor: '#9e9e9e',
+            color: '#000000',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
+        }
+        //add distance + multiplier at the top
+        this.distScore = this.add.text(playerPadding * 2, game.config.height - playerPadding * 3, `Distance: ${Math.round(this.distanceTravelled)}ft`, uiConfig);
+        this.temp = this.speedMultiplier * 0.2 + 4;
+        this.distMultiplier = this.add.text(game.config.width - playerPadding * 9, game.config.height - playerPadding * 3, `x${this.temp}`, uiConfig);
     }
 
     update(time, delta) {
@@ -144,6 +165,7 @@ class Play extends Phaser.Scene {
                 this.player.isGrounded = true;
             }
             this.adjustBuddy();
+            this.adjustScores();
         }
         
         // if grounded, allow them to jump
@@ -359,12 +381,16 @@ class Play extends Phaser.Scene {
         this.input.setDefaultCursor();
         this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameOver = true;
+        //hide play screen stuff
+        this.title.alpha = 0;
+        this.distScore.alpha = 0;
+        this.distMultiplier.alpha = 0;
         // When player loses, make it so they can return to to the menu by pressing the button.
         //temp until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '25px',
-            backgroundColor: '#ffffff',
+            backgroundColor: '#9e9e9e',
             color: '#000000',
             align: 'right',
             padding: {
@@ -403,5 +429,11 @@ class Play extends Phaser.Scene {
             this.player.buddy.y+=2;
         else if (this.player.buddy.y > this.player.y - 20)
             this.player.buddy.y-=2;
+    }
+
+    adjustScores() {
+        this.distScore.text = `Distance: ${Math.round(this.distanceTravelled)}ft`;
+        this.temp = this.speedMultiplier * 0.2 + 4;
+        this.distMultiplier.text = `x${this.temp}`;
     }
 }

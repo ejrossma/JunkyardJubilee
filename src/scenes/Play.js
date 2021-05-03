@@ -250,11 +250,12 @@ class Play extends Phaser.Scene {
     // when player is hit
     playerHit()
     {
-        this.sound.play('hitSound');
-        this.player.body.velocity.y = this.JUMP_VELOCITY;
-        this.gameOver = true;
-        this.loseScreen();
-        //console.log('game over');
+        if(this.gameOver == false){
+            this.player.body.velocity.y = this.JUMP_VELOCITY;
+            this.gameOver = true;
+            this.loseScreen();
+            //console.log('game over');
+        }
     }
 
     // add an obstacle
@@ -381,6 +382,8 @@ class Play extends Phaser.Scene {
 
     
     loseScreen(){
+        //play lose sound
+        this.sound.play('hitSound');
         //change crosshair back to cursor
         this.input.setDefaultCursor();
         this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);

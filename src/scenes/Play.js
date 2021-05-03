@@ -340,6 +340,7 @@ class Play extends Phaser.Scene {
             let fallingObs = new Meteor(this, this.spawn, this.SCROLL_SPEED*deltaMultiplier, 'tire').setOrigin(0.5, 0.5);
             this.meteorGroup.add(fallingObs);
             this.obstacleDeployed = false;
+            fallingObs.wheel = true;
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
             fallingObs.on('pointerover', () => {
@@ -364,7 +365,6 @@ class Play extends Phaser.Scene {
                 explode.on('animationcomplete', () => {
                     explode.destroy();
                 });
-            fallingObs.wheel = true;
             });
         }
 

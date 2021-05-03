@@ -36,6 +36,9 @@ class Menu extends Phaser.Scene {
         this.back4 = this.add.tileSprite(0, 0, 800, 480, 'back4').setOrigin(0, 0);
         this.back5 = this.add.tileSprite(0, 0, 800, 480, 'back5').setOrigin(0, 0);
 
+        //set cursor
+        this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
+
         this.credits = this.add.text(game.config.width/2, game.config.height*0.97, 'Game created by Elijah Rossman, Kevin Lewis, Kristopher Yu',{
             fontFamily: 'Courier',
             fontSize: '15px',

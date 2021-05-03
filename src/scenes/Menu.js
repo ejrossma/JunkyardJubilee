@@ -22,7 +22,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('jumpSound', './assets/jumpSound.wav');
         this.load.audio('hitSound', './assets/hitSound.wav');
         this.load.audio('select', './assets/select.wav');
-        //this.load.audio('BGM', './assets/JunkYardJubileeBGM.wav');
+        this.load.audio('BGM', './assets/JunkYardJubileeBGM.wav');  // slightly edited from this Creative Commons 0 work - https://freesound.org/people/XHALE303/sounds/569960/
 
         this.load.atlas('junkyardAtlas', 'assets/textureAtlas.png', 'assets/textureAtlas.json');
     }

@@ -121,6 +121,15 @@ class Play extends Phaser.Scene {
         this.obstaclesDestroyed = 0;
         this.timesJumped = 0;
         this.firstJump = true;
+
+        // music
+        this.MAX_VOL = 0.125;
+        this.VOL = 0;
+        this.music = this.sound.add('BGM');
+        this.music.setLoop(true);
+        this.music.setVolume(this.VOL);
+        this.music.play();
+
     }
 
     update(time, delta) {
@@ -218,6 +227,23 @@ class Play extends Phaser.Scene {
         else if (!this.gameOver && this.SCROLL_SPEED >=13)
         {
             this.MAX_OBSTACLES = 5;
+        }
+
+        // fade in music
+        if (!this.gameOver && this.VOL < this.MAX_VOL)
+        {
+            this.VOL += .0001;
+            this.music.setVolume(this.VOL);
+            //console.log(this.VOL);
+        }
+        else if (this.gameOver == true && this.VOL > 0)
+        {
+            this.VOL -= .001;
+            this.music.setVolume(this.VOL);
+        }
+        else if (this.gameOver == true && this.VOL <= 0)
+        {
+            this.music.stop();
         }
     }
 
@@ -388,6 +414,7 @@ class Play extends Phaser.Scene {
              this.return.height), Phaser.Geom.Rectangle.Contains);
         this.return.on('pointerdown', () => {
             this.sound.play('select');
+            this.music.stop();
             this.scene.start('menuScene');
         });
         //this.scene.start('menuScene');

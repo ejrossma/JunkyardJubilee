@@ -20,6 +20,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('jumpSound', './assets/jumpSound.wav');
         this.load.audio('hitSound', './assets/hitSound.wav');
         this.load.audio('select', './assets/select.wav');
+        this.load.audio('BGM', './assets/JunkYardJubileeBGM.wav');
 
         this.load.atlas('junkyardAtlas', 'assets/textureAtlas.png', 'assets/textureAtlas.json');
     }
@@ -58,6 +59,7 @@ class Menu extends Phaser.Scene {
             this.sound.play('select');
             this.scene.start('playScene');
         });
+
     }
     update(time, delta){
         let deltaMultiplier = (delta/16.66667);

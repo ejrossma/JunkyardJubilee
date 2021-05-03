@@ -123,7 +123,6 @@ class Play extends Phaser.Scene {
         this.timesJumped = 0;
         this.firstJump = true;
 
-<<<<<<< HEAD
         this.title = this.add.image(game.config.width/2, 0, 'title').setOrigin(0.5, 0);
         //ui text style
         let uiConfig = {
@@ -142,7 +141,6 @@ class Play extends Phaser.Scene {
         this.distScore = this.add.text(playerPadding * 2, game.config.height - playerPadding * 3, `Distance: ${Math.round(this.distanceTravelled)}ft`, uiConfig);
         this.temp = this.speedMultiplier * 0.2 + 4;
         this.distMultiplier = this.add.text(game.config.width - playerPadding * 9, game.config.height - playerPadding * 3, `x${this.temp}`, uiConfig);
-=======
         // music
         // this.MAX_VOL = 0.125;
         // this.VOL = 0;
@@ -151,7 +149,6 @@ class Play extends Phaser.Scene {
         // this.music.setVolume(this.VOL);
         // this.music.play();
 
->>>>>>> e582c32e9c5ad02e2dd416538c2901cdaf4bc79c
     }
 
     update(time, delta) {

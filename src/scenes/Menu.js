@@ -20,6 +20,8 @@ class Menu extends Phaser.Scene {
         this.load.image('boxObject', './assets/pngs/boxObject.png');
         this.load.audio('destroySound', './assets/PewPew.wav');
         this.load.audio('jumpSound', './assets/jumpSound.wav');
+        this.load.audio('hitSound', './assets/hitSound.wav');
+        this.load.audio('select', './assets/select.wav');
 
         this.load.atlas('junkyardAtlas', 'assets/textureAtlas.png', 'assets/textureAtlas.json');
     }
@@ -32,6 +34,8 @@ class Menu extends Phaser.Scene {
         this.back3 = this.add.tileSprite(0, 0, 800, 480, 'back3').setOrigin(0, 0);
         this.back4 = this.add.tileSprite(0, 0, 800, 480, 'back4').setOrigin(0, 0);
         this.back5 = this.add.tileSprite(0, 0, 800, 480, 'back5').setOrigin(0, 0);
+
+
         //Set Temporary text boxes until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',
@@ -52,7 +56,7 @@ class Menu extends Phaser.Scene {
         this.playButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.playButton.width,
              this.playButton.height), Phaser.Geom.Rectangle.Contains);
         this.playButton.on('pointerdown', () => {
-            this.sound.play('destroySound');
+            this.sound.play('select');
             this.scene.start('playScene');
         });
         //instructions button

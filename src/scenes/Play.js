@@ -3,9 +3,22 @@ class Play extends Phaser.Scene {
         super("playScene");
     }
 
+    preload() {
+        //add explosion animation
+        this.load.spritesheet('smallexplosion', './assets/small_explosion64.png', {
+            frameWidth: 64,
+            frameHeight: 64,
+            startFrame: 0,
+            endFrame: 8
+        });
+        //add robot buddy
+        this.load.image('safeMode', './assets/pngs/shootSphere.png');
+        this.load.image('shootMode', './assets/pngs/shootSphereFire.png')
+    }
+
     create() {
         //set cursor
-        this.input.setDefaultCursor('url(assets/crosshair.png) 32.5 32.5, pointer');
+        this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
 
         //Set background color
         this.cameras.main.setBackgroundColor('#d6b894'); 
@@ -66,6 +79,8 @@ class Play extends Phaser.Scene {
 
         // create the player (x, y, image)
         this.player = this.physics.add.sprite(100, game.config.height - tileSize*2, 'junkyardAtlas', 'robotRun0001').setScale(SCALE);
+        //add player buddy
+        this.player.buddy = this.add.sprite(125, game.config.height - tileSize*2 - 25, 'safeMode');
         //setup player animation from texture atlas
         this.anims.create({
             key: 'robotRun',
@@ -80,6 +95,17 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
         this.player.anims.play('robotRun');
+
+        //meteor explosion
+        this.anims.create({
+            key: 'smallexplode',
+            frames: this.anims.generateFrameNumbers('smallexplosion', {
+                start: 0,
+                end: 8,
+                first: 0
+            }),
+            frameRate: 30
+        });
         // cursor key input (aka keyboard keys which are written in lowercase)
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -105,7 +131,7 @@ class Play extends Phaser.Scene {
         this.back3.tilePositionX -= 0.1*deltaMultiplier;
         this.back4.tilePositionX -= 0.15*deltaMultiplier;
         // Check if collides
-        this.physics.world.collide(this.player, this.meteorGroup, this.loseScreen, null, this);
+        this.physics.world.collide(this.player, this.meteorGroup, this.playerHit, null, this);
         this.physics.world.collide(this.player, this.jumpObsGroup, this.playerHit, null, this);
         
         // update tiles (aka the ground scrolls)
@@ -117,6 +143,7 @@ class Play extends Phaser.Scene {
             if (this.player.y > 396) {
                 this.player.isGrounded = true;
             }
+            this.adjustBuddy();
         }
         
         // if grounded, allow them to jump
@@ -167,6 +194,8 @@ class Play extends Phaser.Scene {
             {
                 this.player.destroy();
             }
+
+            this.player.buddy.y--;
         }
 
         // update amount of objects spawned
@@ -195,6 +224,7 @@ class Play extends Phaser.Scene {
     // when player is hit
     playerHit()
     {
+        this.sound.play('hitSound');
         this.player.body.velocity.y = this.JUMP_VELOCITY;
         this.gameOver = true;
         this.loseScreen();
@@ -256,10 +286,28 @@ class Play extends Phaser.Scene {
             this.obstacleDeployed = false;
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
+            fallingObs.on('pointerover', () => {
+                this.player.buddy.setTexture('shootMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair_fire.png) 32.5 32.5, pointer');
+            });
+            fallingObs.on('pointerout', () => {
+                this.player.buddy.setTexture('safeMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
+            });
             fallingObs.on('pointerdown', () => {
-                fallingObs.destroyObj();
-                this.obstaclesDestroyed += 1;
+                let explode = this.add.sprite(fallingObs.x - 32, fallingObs.y - 32, 'smallexplode').setOrigin(0);
+                explode.anims.play('smallexplode');
                 this.sound.play('destroySound');
+                this.obstaclesDestroyed += 1;
+                fallingObs.destroyObj();
+                this.player.buddy.setTexture('safeMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
+                explode.on('animationcomplete', () => {
+                    explode.destroy();
+                });
             });
         }
         else{
@@ -268,12 +316,30 @@ class Play extends Phaser.Scene {
             this.obstacleDeployed = false;
             fallingObs.setInteractive(new Phaser.Geom.Rectangle(0, 0, fallingObs.width,
                 fallingObs.height), Phaser.Geom.Rectangle.Contains);
-            fallingObs.on('pointerdown', () => {
-                fallingObs.destroyObj();
-                this.obstaclesDestroyed += 1;
-                this.sound.play('destroySound');
+            fallingObs.on('pointerover', () => {
+                this.player.buddy.setTexture('shootMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair_fire.png) 32.5 32.5, pointer');
             });
+            fallingObs.on('pointerout', () => {
+                this.player.buddy.setTexture('safeMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
+            });
+            fallingObs.on('pointerdown', () => {
+                let explode = this.add.sprite(fallingObs.x - 32, fallingObs.y - 32, 'smallexplode').setOrigin(0);
+                explode.anims.play('smallexplode');
+                this.sound.play('destroySound');
+                this.obstaclesDestroyed += 1;
+                fallingObs.destroyObj();
+                this.player.buddy.setTexture('safeMode');
+                //set cursor
+                this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
+                explode.on('animationcomplete', () => {
+                    explode.destroy();
+                });
             fallingObs.wheel = true;
+            });
         }
 
         
@@ -290,7 +356,7 @@ class Play extends Phaser.Scene {
     
     loseScreen(){
         //change crosshair back to cursor
-        this.input.setDefaultCursor('url(assets/crosshair.png) 32.5 32.5, pointer');
+        this.input.setDefaultCursor();
         this.lose = this.add.tileSprite(400, 125, 400, 200, 'gameOverCard').setOrigin(0.5, 0.5);
         this.gameOver = true;
         // When player loses, make it so they can return to to the menu by pressing the button.
@@ -321,8 +387,21 @@ class Play extends Phaser.Scene {
         this.return.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.return.width,
              this.return.height), Phaser.Geom.Rectangle.Contains);
         this.return.on('pointerdown', () => {
+            this.sound.play('select');
             this.scene.start('menuScene');
         });
         //this.scene.start('menuScene');
+    }
+
+    adjustBuddy() {
+        if (this.player.buddy.x < this.player.x + 20)
+            this.player.buddy.x+=2;
+        else if (this.player.buddy.x > this.player.x + 30)
+            this.player.buddy.x-=2;
+
+        if (this.player.buddy.y < this.player.y - 30)
+            this.player.buddy.y+=2;
+        else if (this.player.buddy.y > this.player.y - 20)
+            this.player.buddy.y-=2;
     }
 }

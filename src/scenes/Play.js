@@ -28,6 +28,7 @@ class Play extends Phaser.Scene {
         this.back3 = this.add.tileSprite(0, 0, 800, 480, 'back3').setOrigin(0, 0);
         this.back4 = this.add.tileSprite(0, 0, 800, 480, 'back4').setOrigin(0, 0);
         this.back5 = this.add.tileSprite(0, 0, 800, 480, 'back5').setOrigin(0, 0);
+        this.back6 = this.add.tileSprite(0, 0, 800, 480, 'back6').setOrigin(0, 0);
 
         // variables and settings
         this.JUMP_VELOCITY = -800;              // lower -> cant jump as high, higher -> can jump higher
@@ -152,10 +153,12 @@ class Play extends Phaser.Scene {
     update(time, delta) {
         this.distanceTravelled += 0.1*this.speedMultiplier;
         let deltaMultiplier = (delta/16.66667);
-        this.back1.tilePositionX -= 0.05*deltaMultiplier;
-        this.back2.tilePositionX -= 0.07*deltaMultiplier;
-        this.back3.tilePositionX -= 0.1*deltaMultiplier;
-        this.back4.tilePositionX -= 0.15*deltaMultiplier;
+        this.back1.tilePositionX += 0.05*deltaMultiplier + this.speedMultiplier/100;
+        this.back2.tilePositionX += 0.1*deltaMultiplier + this.speedMultiplier/100;
+        this.back3.tilePositionX += 0.2*deltaMultiplier + this.speedMultiplier/100;
+        this.back4.tilePositionX += 0.5*deltaMultiplier + this.speedMultiplier/100;
+        this.back5.tilePositionX += 0.7*deltaMultiplier + this.speedMultiplier/100;
+        this.back6.tilePositionX += 1*deltaMultiplier + this.speedMultiplier/100;
         // Check if collides
         this.physics.world.collide(this.player, this.meteorGroup, this.playerHit, null, this);
         this.physics.world.collide(this.player, this.jumpObsGroup, this.playerHit, null, this);

@@ -40,13 +40,19 @@ class Menu extends Phaser.Scene {
 
         //set cursor
         this.input.setDefaultCursor('url(assets/pngs/crosshair.png) 32.5 32.5, pointer');
-
-        this.credits = this.add.text(game.config.width/2, game.config.height*0.97, 'Game created by Elijah Rossman, Kevin Lewis, Kristopher Yu',{
+        let creditLine = {
             fontFamily: 'Courier',
-            fontSize: '15px',
+            fontSize: '12px',
             color: '#ffffff',
             align: 'left',
-        }).setOrigin(0.5, 0.5);
+        }
+        //Credits at the bottom
+        this.credits = this.add.text(game.config.width/2, game.config.height*0.9, 'Robot/Ground tile art, play UI & Programming by Elijah Rossman.',
+            creditLine).setOrigin(0.5, 0.5);
+        this.credits2 = this.add.text(game.config.width/2, game.config.height*0.94, 'Music/SFX, ground obstacle art/code & Programming by Kevin Lewis.',
+            creditLine).setOrigin(0.5, 0.5);
+        this.credits3 = this.add.text(game.config.width/2, game.config.height*0.98, 'Background, SFX, falling obstacles & Programming by Kristopher Yu',
+            creditLine).setOrigin(0.5, 0.5);
         //Set Temporary text boxes until buttons are made
         let menuConfig = {
             fontFamily: 'Courier',
@@ -73,7 +79,7 @@ class Menu extends Phaser.Scene {
             fixedWidth: 400
         }
         //the normal play button
-        this.playButton = this.add.text(game.config.width*0.25, game.config.height*0.7, 'Normal',
+        this.playButton = this.add.text(game.config.width*0.25, game.config.height*0.8, 'Normal',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive so that it brings you to play scene
         this.playButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.playButton.width,
@@ -86,7 +92,7 @@ class Menu extends Phaser.Scene {
             this.scene.start('playScene');
         });
         //the hard play button
-        this.playButton = this.add.text(game.config.width*0.75, game.config.height*0.7, 'Hard',
+        this.playButton = this.add.text(game.config.width*0.75, game.config.height*0.8, 'Hard',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive so that it brings you to play scene
         this.playButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.playButton.width,
@@ -99,7 +105,7 @@ class Menu extends Phaser.Scene {
             this.scene.start('playScene');
         });
         //instructions button
-        this.instructionButton = this.add.text(game.config.width/2, game.config.height*0.87, 'HOW TO PLAY',
+        this.instructionButton = this.add.text(game.config.width/2, game.config.height*0.6, 'HOW TO PLAY',
         instructionConfig).setOrigin(0.5, 0.5);
         //set button as interactive
         this.instructionButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.instructionButton.width,

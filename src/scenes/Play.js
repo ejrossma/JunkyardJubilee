@@ -141,13 +141,12 @@ class Play extends Phaser.Scene {
         this.temp = this.speedMultiplier * 0.2 + 4;
         this.distMultiplier = this.add.text(game.config.width - playerPadding * 18, game.config.height - playerPadding * 3, `Speed: x${this.temp}`, uiConfig);
         // music
-        // this.MAX_VOL = 0.125;
-        // this.VOL = 0;
-        // this.music = this.sound.add('BGM');
-        // this.music.setLoop(true);
-        // this.music.setVolume(this.VOL);
-        // this.music.play();
-
+        this.MAX_VOL = 0.125;
+        this.VOL = 0;
+        this.music = this.sound.add('BGM');
+        this.music.setLoop(true);
+        this.music.setVolume(this.VOL);
+        this.music.play();
     }
 
     update(time, delta) {
@@ -245,27 +244,39 @@ class Play extends Phaser.Scene {
         {
             this.MAX_OBSTACLES = 4;
         }
-        else if (!this.gameOver && this.SCROLL_SPEED >=13)
+        else if (!this.gameOver && this.SCROLL_SPEED >=11  && this.SCROLL_SPEED < 14)
         {
             this.MAX_OBSTACLES = 5;
         }
+        else if (!this.gameOver && this.SCROLL_SPEED >=14  && this.SCROLL_SPEED < 16)
+        {
+            this.MAX_OBSTACLES = 6;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=16  && this.SCROLL_SPEED < 18)
+        {
+            this.MAX_OBSTACLES = 7;
+        }
+        else if (!this.gameOver && this.SCROLL_SPEED >=18)
+        {
+            this.MAX_OBSTACLES = 8;
+        }
 
         // fade in music
-        // if (!this.gameOver && this.VOL < this.MAX_VOL)
-        // {
-        //     this.VOL += .0001;
-        //     this.music.setVolume(this.VOL);
-        //     //console.log(this.VOL);
-        // }
-        // else if (this.gameOver == true && this.VOL > 0)
-        // {
-        //     this.VOL -= .001;
-        //     this.music.setVolume(this.VOL);
-        // }
-        // else if (this.gameOver == true && this.VOL <= 0)
-        // {
-        //     this.music.stop();
-        // }
+        if (!this.gameOver && this.VOL < this.MAX_VOL)
+        {
+            this.VOL += .0001;
+            this.music.setVolume(this.VOL);
+            //console.log(this.VOL);
+        }
+        else if (this.gameOver == true && this.VOL > 0)
+        {
+            this.VOL -= .001;
+            this.music.setVolume(this.VOL);
+        }
+        else if (this.gameOver == true && this.VOL <= 0)
+        {
+            this.music.stop();
+        }
     }
 
     // when player is hit
@@ -394,6 +405,7 @@ class Play extends Phaser.Scene {
 
         
     }
+    
     adjustSpeed() {
         if (this.SCROLL_SPEED < MAX_SPEED) {
             //console.log("speed increased");
@@ -444,7 +456,7 @@ class Play extends Phaser.Scene {
              this.return.height), Phaser.Geom.Rectangle.Contains);
         this.return.on('pointerdown', () => {
             this.sound.play('select');
-            //this.music.stop();
+            this.music.stop();
             this.scene.start('menuScene');
         });
         //add restart button
@@ -455,6 +467,7 @@ class Play extends Phaser.Scene {
              this.restartGame.height), Phaser.Geom.Rectangle.Contains);
         this.restartGame.on('pointerdown', () => {
             this.sound.play('select');
+            this.music.stop();
             this.scene.restart();
         });
     }

@@ -60,7 +60,10 @@ let cursors;
 let SPEED_MULTIPLIER;
 let GAME_SPEED;
 let MAX_SPEED;
-//High score
-let topScore = 0;
+//High scores
+let topObstaclesJumped = 0;
+let topDistanceTravelled = 0;
+let topObstaclesDestroyed = 0;
+let topTimesJumped = 0;
 const SCALE = 0.5;
 const tileSize = 64;

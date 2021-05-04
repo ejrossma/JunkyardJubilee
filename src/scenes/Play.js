@@ -427,6 +427,19 @@ class Play extends Phaser.Scene {
         this.title.alpha = 0;
         this.distScore.alpha = 0;
         this.distMultiplier.alpha = 0;
+        //Update high scores if needed
+        if(topObstaclesDestroyed < this.obstaclesDestroyed){
+            topObstaclesDestroyed = this.obstaclesDestroyed;
+        }
+        if(topDistanceTravelled < this.distanceTravelled){
+            topDistanceTravelled = this.distanceTravelled;
+        }
+        if(topObstaclesJumped < this.obstaclesJumped){
+            topObstaclesJumped = this.obstaclesJumped;
+        }
+        if(topTimesJumped < this.timesJumped){
+            topTimesJumped = this.timesJumped;
+        }
         // When player loses, make it so they can return to to the menu by pressing the button.
         //temp until buttons are made
         let menuConfig = {
@@ -434,21 +447,37 @@ class Play extends Phaser.Scene {
             fontSize: '25px',
             backgroundColor: '#9e9e9e',
             color: '#000000',
-            align: 'right',
+            align: 'left',
             padding: {
                 top: 5,
                 bottom: 5,
             },
             fixedWidth: 0
         }
-        this.return = this.add.text(game.config.width/2, 260, "obstacles jumped: " + this.obstaclesJumped,
-        menuConfig).setOrigin(0.5, 0.5);
-        this.return = this.add.text(game.config.width/2, 300, "obstacles destroyed: " + this.obstaclesDestroyed,
-        menuConfig).setOrigin(0.5, 0.5);
-        this.return = this.add.text(game.config.width/2, 340, "distance travelled: " + Math.floor(this.distanceTravelled) + " ft",
-        menuConfig).setOrigin(0.5, 0.5);
-        this.return = this.add.text(game.config.width/2, 380, "total times jumped: " + this.timesJumped,
-        menuConfig).setOrigin(0.5, 0.5);
+
+        //Current Score
+        this.return = this.add.text(game.config.width*0.01, 220, "Your Score",
+        menuConfig).setOrigin(0, 0.5);
+        this.return = this.add.text(game.config.width*0.01, 260, "obstacles jumped: " + this.obstaclesJumped,
+        menuConfig).setOrigin(0, 0.5);
+        this.return = this.add.text(game.config.width*0.01, 300, "obstacles destroyed: " + this.obstaclesDestroyed,
+        menuConfig).setOrigin(0, 0.5);
+        this.return = this.add.text(game.config.width*0.01, 340, "distance travelled: " + Math.floor(this.distanceTravelled) + " ft",
+        menuConfig).setOrigin(0, 0.5);
+        this.return = this.add.text(game.config.width*0.01, 380, "total times jumped: " + this.timesJumped,
+        menuConfig).setOrigin(0, 0.5);
+        //High Score
+        this.return = this.add.text(game.config.width*0.99, 220, "High Scores",
+        menuConfig).setOrigin(1, 0.5);
+        this.return = this.add.text(game.config.width*0.99, 260, "obstacles jumped: " + topObstaclesJumped,
+        menuConfig).setOrigin(1, 0.5);
+        this.return = this.add.text(game.config.width*0.99, 300, "obstacles destroyed: " + topObstaclesDestroyed,
+        menuConfig).setOrigin(1, 0.5);
+        this.return = this.add.text(game.config.width*0.99, 340, "distance travelled: " + Math.floor(topDistanceTravelled) + " ft",
+        menuConfig).setOrigin(1, 0.5);
+        this.return = this.add.text(game.config.width*0.99, 380, "top times jumped: " + topTimesJumped,
+        menuConfig).setOrigin(1, 0.5);
+        //return to menu button
         this.return = this.add.text(game.config.width*0.4, 430, 'MENU',
         menuConfig).setOrigin(0.5, 0.5);
         //set interactive

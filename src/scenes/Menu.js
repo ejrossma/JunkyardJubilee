@@ -51,7 +51,7 @@ class Menu extends Phaser.Scene {
             creditLine).setOrigin(0.5, 0.5);
         this.credits2 = this.add.text(game.config.width/2, game.config.height*0.94, 'Music/SFX, ground obstacle art/code & Programming by Kevin Lewis.',
             creditLine).setOrigin(0.5, 0.5);
-        this.credits3 = this.add.text(game.config.width/2, game.config.height*0.98, 'Background, SFX, falling obstacles & Programming by Kristopher Yu',
+        this.credits3 = this.add.text(game.config.width/2, game.config.height*0.98, 'Background/Menu/Tutorial, SFX, falling obstacles & Programming by Kristopher Yu',
             creditLine).setOrigin(0.5, 0.5);
         //Set Temporary text boxes until buttons are made
         let menuConfig = {
